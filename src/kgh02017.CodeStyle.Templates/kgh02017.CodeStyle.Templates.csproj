@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+
+    <PackageId>kgh02017.CodeStyle.Templates</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <PackageType>Template</PackageType>
+    <Version>1.0.0-preview.1</Version>
+    <Authors>Taku Izumi</Authors>
+    <Description>
+      Code style templates for .NET projects.
+    </Description>
+
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content
+      Include="templates\**\*"
+      Exclude="templates\**\bin\**;templates\**\obj\**"
+      Pack="true"
+      PackagePath="content" />
+  </ItemGroup>
+
+</Project>

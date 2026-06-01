@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/kgh02017.CodeStyle.Templates/kgh02017.CodeStyle.Templates.csproj" Id="438e8c72-37f9-4401-a9a7-56186d98a243" />
+  </Folder>
+  <Folder Name="/tests/" />
+</Solution>

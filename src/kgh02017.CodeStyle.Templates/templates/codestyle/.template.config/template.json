@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "kgh02017",
+  "classifications": [
+    "CodeStyle",
+    "EditorConfig"
+  ],
+  "identity": "kgh02017.CodeStyle",
+  "name": "kgh02017 Code Style",
+  "shortName": "kgh02017.codestyle",
+  "preferNameDirectory": false
+}
