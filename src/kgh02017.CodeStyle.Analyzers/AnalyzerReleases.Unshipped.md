@@ -8,4 +8,5 @@ KGH1003 | Nullability | Warning |
 KGH1004 | Formatting | Warning |
 KGH1005 | Readability | Warning |
 KGH1006 | Readability | Warning |
+KGH1007 | Formatting | Warning |
 

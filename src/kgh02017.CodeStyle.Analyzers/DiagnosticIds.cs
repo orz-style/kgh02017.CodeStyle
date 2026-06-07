@@ -8,4 +8,5 @@ public sealed class DiagnosticIds
     public const string MaximumLineLength = "KGH1004";
     public const string PreferUsingDeclaration = "KGH1005";
     public const string PreferSwitchExpression = "KGH1006";
+    public const string PreferAssignmentLineBreak = "KGH1007";
 }

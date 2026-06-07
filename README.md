@@ -44,6 +44,7 @@ Includes all analyzers and supported code fixes.
 | KGH1004 | Formatting | Warning | Wrap the text so that line length is less than 120 characters |
 | KGH1005 | Readability | Warning | Use a using declaration instead of a using statement |
 | KGH1006 | Readability | Warning | Use a switch expression instead of a switch statement |
+| KGH1007 | Formatting | Warning | Place a line break after the assignment operator |
 
 #### Roslyn code fixes for supported style violations.
 
@@ -52,6 +53,7 @@ Includes all analyzers and supported code fixes.
 | KGH1003 | PreferIsNullCodeFixProvider |
 | KGH1005 | PreferUsingDeclarationCodeFixProvider |
 | KGH1006 | PreferSwitchExpressionCodeFixProvider |
+| KGH1007 | PreferAssignmentLineBreakCodeFixProvider |
 
 ## Installation
 
