@@ -12,4 +12,5 @@ KGH1007 | Formatting | Warning |
 KGH1008 | Readability | Warning |
 KGH1009 | Nullability | Warning |
 KGH1010 | Logging | Warning |
+KGH1011 | Readability | Warning |
 

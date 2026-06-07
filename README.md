@@ -48,6 +48,7 @@ Includes all analyzers and supported code fixes.
 | KGH1008 | Readability | Warning | Use named arguments for null and boolean literal arguments |
 | KGH1009 | Nullability | Warning | Use ArgumentNullException.ThrowIfNull instead of throwing ArgumentNullException manually |
 | KGH1010 | Logging | Warning | Use PascalCase for structured logging placeholder names |
+| KGH1011 | Readability | Warning | Use a collection expression when the collection type is apparent |
 
 #### Roslyn code fixes for supported style violations.
 
@@ -59,6 +60,7 @@ Includes all analyzers and supported code fixes.
 | KGH1007 | PreferAssignmentLineBreakCodeFixProvider |
 | KGH1008 | PreferNamedArgumentsForLiteralsCodeFixProvider |
 | KGH1009 | PreferThrowIfNullCodeFixProvider |
+| KGH1011 | PreferCollectionExpressionCodeFixProvider |
 
 ## Installation
 
