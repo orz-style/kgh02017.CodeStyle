@@ -45,6 +45,7 @@ Includes all analyzers and supported code fixes.
 | KGH1005 | Readability | Warning | Use a using declaration instead of a using statement |
 | KGH1006 | Readability | Warning | Use a switch expression instead of a switch statement |
 | KGH1007 | Formatting | Warning | Place a line break after the assignment operator |
+| KGH1008 | Readability | Warning | Use named arguments for null and boolean literal arguments |
 
 #### Roslyn code fixes for supported style violations.
 
@@ -54,6 +55,7 @@ Includes all analyzers and supported code fixes.
 | KGH1005 | PreferUsingDeclarationCodeFixProvider |
 | KGH1006 | PreferSwitchExpressionCodeFixProvider |
 | KGH1007 | PreferAssignmentLineBreakCodeFixProvider |
+| KGH1008 | PreferNamedArgumentsForLiteralsCodeFixProvider |
 
 ## Installation
 
