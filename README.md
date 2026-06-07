@@ -47,6 +47,7 @@ Includes all analyzers and supported code fixes.
 | KGH1007 | Formatting | Warning | Place a line break after the assignment operator |
 | KGH1008 | Readability | Warning | Use named arguments for null and boolean literal arguments |
 | KGH1009 | Nullability | Warning | Use ArgumentNullException.ThrowIfNull instead of throwing ArgumentNullException manually |
+| KGH1010 | Logging | Warning | Use PascalCase for structured logging placeholder names |
 
 #### Roslyn code fixes for supported style violations.
 
