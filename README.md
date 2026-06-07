@@ -39,6 +39,7 @@ Includes all analyzers and supported code fixes.
 | Rule ID | Category | Severity | Rule Description |
 | ------- | -------- | -------- | ---------------- |
 | KGH1001 | Logging | Warning | Do not use interpolated string in logger calls. Use structured logging instead |
+| KGH1002 | Strings | Warning | Specify StringComparison explicitly |
 
 #### Roslyn code fixes for supported style violations.
 
