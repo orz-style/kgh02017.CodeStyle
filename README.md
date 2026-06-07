@@ -14,6 +14,30 @@ This repository contains:
 
 The goal is to provide a consistent and opinionated development experience across personal .NET projects.
 
+## Requirements
+
+- .NET SDK 9.0 or later
+- C# 12 or later
+
+## Example (KGH1007)
+
+Bad
+
+```csharp
+IEnumerable<int> values = Enumerable.Range(1, 10)
+    .Where(x => x > 5)
+    .ToList();
+```
+
+Good
+
+```csharp
+IEnumerable<int> values =
+    Enumerable.Range(1, 10)
+        .Where(x => x > 5)
+        .ToList();
+```
+
 ## Packages
 
 ### kgh02017.CodeStyle.Templates
