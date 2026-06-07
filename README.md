@@ -40,11 +40,13 @@ Includes all analyzers and supported code fixes.
 | ------- | -------- | -------- | ---------------- |
 | KGH1001 | Logging | Warning | Do not use interpolated string in logger calls. Use structured logging instead |
 | KGH1002 | Strings | Warning | Specify StringComparison explicitly |
+| KGH1003 | Nullability | Warning | Use 'is null' or 'is not null' instead of equality operators |
 
 #### Roslyn code fixes for supported style violations.
 
 | Rule ID | CodeFix Provider  |
 | ------- | ------------------|
+| KGH1003 | PreferIsNullCodeFixProvider |
 
 ## Installation
 
