@@ -46,6 +46,7 @@ Includes all analyzers and supported code fixes.
 | KGH1006 | Readability | Warning | Use a switch expression instead of a switch statement |
 | KGH1007 | Formatting | Warning | Place a line break after the assignment operator |
 | KGH1008 | Readability | Warning | Use named arguments for null and boolean literal arguments |
+| KGH1009 | Nullability | Warning | Use ArgumentNullException.ThrowIfNull instead of throwing ArgumentNullException manually |
 
 #### Roslyn code fixes for supported style violations.
 
@@ -56,6 +57,7 @@ Includes all analyzers and supported code fixes.
 | KGH1006 | PreferSwitchExpressionCodeFixProvider |
 | KGH1007 | PreferAssignmentLineBreakCodeFixProvider |
 | KGH1008 | PreferNamedArgumentsForLiteralsCodeFixProvider |
+| KGH1009 | PreferThrowIfNullCodeFixProvider |
 
 ## Installation
 

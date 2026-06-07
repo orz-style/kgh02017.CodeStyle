@@ -10,4 +10,5 @@ public sealed class DiagnosticIds
     public const string PreferSwitchExpression = "KGH1006";
     public const string PreferAssignmentLineBreak = "KGH1007";
     public const string PreferNamedArgumentsForLiterals = "KGH1008";
+    public const string PreferThrowIfNull = "KGH1009";
 }
