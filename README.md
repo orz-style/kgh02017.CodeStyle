@@ -43,6 +43,7 @@ Includes all analyzers and supported code fixes.
 | KGH1003 | Nullability | Warning | Use 'is null' or 'is not null' instead of equality operators |
 | KGH1004 | Formatting | Warning | Wrap the text so that line length is less than 120 characters |
 | KGH1005 | Readability | Warning | Use a using declaration instead of a using statement |
+| KGH1006 | Readability | Warning | Use a switch expression instead of a switch statement |
 
 #### Roslyn code fixes for supported style violations.
 
@@ -50,6 +51,7 @@ Includes all analyzers and supported code fixes.
 | ------- | ------------------|
 | KGH1003 | PreferIsNullCodeFixProvider |
 | KGH1005 | PreferUsingDeclarationCodeFixProvider |
+| KGH1006 | PreferSwitchExpressionCodeFixProvider |
 
 ## Installation
 
