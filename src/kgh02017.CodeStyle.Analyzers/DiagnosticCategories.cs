@@ -6,4 +6,5 @@ public sealed class DiagnosticCategories
     public const string Strings = "Strings";
     public const string Nullability = "Nullability";
     public const string Formatting = "Formatting";
+    public const string Readability = "Readability";
 }

@@ -6,4 +6,5 @@ KGH1001 | Logging | Warning |
 KGH1002 | Strings | Warning |
 KGH1003 | Nullability | Warning |
 KGH1004 | Formatting | Warning |
+KGH1005 | Readability | Warning |
 
