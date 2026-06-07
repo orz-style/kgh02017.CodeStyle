@@ -8,7 +8,13 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="src/kgh02017.CodeStyle.Analyzers/kgh02017.CodeStyle.Analyzers.csproj" Id="50b42d4b-0454-4292-93bf-4abb657aecc6" />
+    <Project Path="src/kgh02017.CodeStyle.CodeFixes/kgh02017.CodeStyle.CodeFixes.csproj" Id="67d9db75-7313-427a-a64c-0d721bc88d2a" />
     <Project Path="src/kgh02017.CodeStyle.Templates/kgh02017.CodeStyle.Templates.csproj" Id="438e8c72-37f9-4401-a9a7-56186d98a243" />
+    <Project Path="src/kgh02017.CodeStyle/kgh02017.CodeStyle.csproj" Id="962c8678-75e8-4f43-b916-a5d838d426fa" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/kgh02017.CodeStyle.Analyzers.Tests/kgh02017.CodeStyle.Analyzers.Tests.csproj" Id="f6e3e0c9-8a7b-4883-af0e-4be4feb5524e" />
+    <Project Path="tests/kgh02017.CodeStyle.CodeFixes.Tests/kgh02017.CodeStyle.CodeFixes.Tests.csproj" Id="c071b853-126e-47f8-971d-de7bc04738f0" />
+  </Folder>
 </Solution>

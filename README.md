@@ -10,6 +10,7 @@ This repository contains:
 * .NET project templates
 * Coding style guidelines
 * EditorConfig settings
+* Roslyn analyzers and code fixes
 
 The goal is to provide a consistent and opinionated development experience across personal .NET projects.
 
@@ -27,6 +28,22 @@ Currently includes:
 * `CodeStyle.md`
 * `.gitignore`
 
+### kgh02017.CodeStyle
+
+Combined Roslyn analyzers and code fixes package.
+
+Includes all analyzers and supported code fixes.
+
+#### Roslyn analyzers for coding style rules.
+
+| Rule ID | Category | Severity | Rule Description |
+| ------- | -------- | -------- | ---------------- |
+
+#### Roslyn code fixes for supported style violations.
+
+| Rule ID | CodeFix Provider  |
+| ------- | ------------------|
+
 ## Installation
 
 Install the template package:
@@ -39,6 +56,12 @@ Create a new coding style configuration in an existing repository:
 
 ```bash
 dotnet new kgh02017.codestyle
+```
+
+Install the analyzers and code fixes package:
+
+```bash
+dotnet add package kgh02017.CodeStyle
 ```
 
 ## Coding Style
@@ -64,10 +87,13 @@ Key principles:
 kgh02017.CodeStyle
 |
 |-- src
-|   |
-|   `-- kgh02017.CodeStyle.Templates
+|   |-- kgh02017.CodeStyle.Templates
+|   |-- kgh02017.CodeStyle.Analyzers
+|   `-- kgh02017.CodeStyle.CodeFixes
 |
 |-- tests
+|   |-- kgh02017.CodeStyle.Analyzers.Tests
+|   `-- kgh02017.CodeStyle.CodeFixes.Tests
 |
 |-- .editorconfig
 |-- Directory.Build.props

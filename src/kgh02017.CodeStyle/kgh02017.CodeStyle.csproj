@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+
+    <PackageId>kgh02017.CodeStyle</PackageId>
+    <Version>1.0.0-preview.1</Version>
+    <Authors>Taku Izumi</Authors>
+    <Description>Personal Roslyn analyzers and code fixes for modern C# coding style.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/orz-style/kgh02017.CodeStyle</RepositoryUrl>
+    <PackageTags>roslyn;analyzer;codefix;csharp;dotnet;coding-style</PackageTags>
+
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\kgh02017.CodeStyle.Analyzers\kgh02017.CodeStyle.Analyzers.csproj" />
+    <ProjectReference Include="..\kgh02017.CodeStyle.CodeFixes\kgh02017.CodeStyle.CodeFixes.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+
+    <None
+      Include="..\kgh02017.CodeStyle.Analyzers\bin\$(Configuration)\netstandard2.0\kgh02017.CodeStyle.Analyzers.dll"
+      Pack="true"
+      PackagePath="analyzers/dotnet/cs" />
+
+    <None
+      Include="..\kgh02017.CodeStyle.CodeFixes\bin\$(Configuration)\netstandard2.0\kgh02017.CodeStyle.CodeFixes.dll"
+      Pack="true"
+      PackagePath="analyzers/dotnet/cs" />
+  </ItemGroup>
+
+</Project>
