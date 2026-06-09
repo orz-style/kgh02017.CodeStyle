@@ -1,0 +1,65 @@
+name: Push
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: 'The name of artifacts to push'
+        required: true
+        type: string
+
+env:
+    TAG_NAME: ""
+    REPOSITORY: "artifacts/kgh02017-codestyle" # MUST BE LOWER CASE
+
+jobs:
+  push:
+    name: push
+    runs-on: ubuntu-latest
+    steps:
+      # Download artifact
+      # https://github.com/actions/download-artifact
+      - uses: actions/download-artifact@v5
+        with:
+          name: ${{ inputs.artifact-name }}
+
+      # Retrieve version from artifact name
+      - name: Retrieve version from artifact name
+        shell: bash
+        run: |
+          ARTIFACT_NAME="${{ inputs.artifact-name }}"
+          VERSION="${ARTIFACT_NAME#kgh02017.CodeStyle-}"
+          echo "TAG_NAME=$VERSION" >> $GITHUB_ENV
+
+      # Create zip archive that contains *.nupkg
+      - name: Create zip archive
+        shell: bash
+        run: |
+          zip -r kgh02017.CodeStyle.zip ./*.nupkg
+
+      # Install ORAS CLI using the official action
+      # https://github.com/marketplace/actions/setup-oras
+      - uses: oras-project/setup-oras@v1
+        with:
+          version: 1.2.3
+
+      # ORAS Registry Login
+      - name: ORAS Login
+        shell: bash
+        run: |
+          echo ${{ secrets.ORAS_PASSWORD }} | \
+          oras login ${{ vars.ORAS_REGISTRY }} -u '${{ secrets.ORAS_USERNAME }}' --password-stdin
+
+      # Push artifact using ORAS CLI
+      - name: Push artifact to ORAS
+        shell: bash
+        run: |
+          oras push ${{ vars.ORAS_REGISTRY }}/${{ env.REPOSITORY }}:v${{ env.TAG_NAME }} \
+          kgh02017.CodeStyle.zip \
+          --annotation "pushd-by=github-actions"
+
+      # Put latest tag
+      - name: Put latest tag to ORAS
+        shell: bash
+        run: |
+          oras tag ${{ vars.ORAS_REGISTRY }}/${{ env.REPOSITORY }}:v${{ env.TAG_NAME }} latest

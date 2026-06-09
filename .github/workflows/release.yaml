@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: 'The name of artifacts to release'
+        required: true
+        type: string
+      git-tag-version:
+        description: 'git tag name starting with v'
+        required: true
+        type: string
+
+env:
+  RELEASE_FILE: ""
+
+jobs:
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    steps:
+      # Download artifact
+      # https://github.com/actions/download-artifact
+      - uses: actions/download-artifact@v5
+        with:
+          name: ${{ inputs.artifact-name }}
+
+      # Set Release file name
+      - name: Set Release file name
+        shell: bash
+        run: |
+          TAG_VERSION="${{ inputs.git-tag-version }}"
+          VERSION="${TAG_VERSION#v}"
+          echo "RELEASE_FILE=kgh02017.CodeStyle-${VERSION}.zip" >> $GITHUB_ENV
+
+      # Create zip archive for release
+      - name: Create zip archive
+        shell: bash
+        run: |
+          zip -r ${{ env.RELEASE_FILE }} ./*.nupkg
+
+      # Upload release Assets
+      # https://github.com/AButler/upload-release-assets
+      - uses: AButler/upload-release-assets@v3.0
+        with:
+          files:  ${{ env.RELEASE_FILE }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ inputs.git-tag-version }}
+
+      # Push to NuGet
+      - name: Push to NuGet
+        shell: bash
+        run: |
+          dotnet nuget push "./*.nupkg" \
+            --api-key "${{ secrets.NUGET_API_KEY }}" \
+            --source "https://api.nuget.org/v3/index.json" \
+            --skip-duplicate

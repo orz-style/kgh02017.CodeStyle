@@ -1,0 +1,140 @@
+name: Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      build-mode:
+        description: 'Build mode'
+        required: true
+        type: choice
+        options: ['ci']
+
+  workflow_call:
+    inputs:
+      build-mode:
+        description: 'Build mode'
+        required: true
+        type: string
+      git-tag-version:
+        description: 'git tag name starting with v'
+        required: false
+        type: string
+    outputs:
+      artifact-name:
+        description: 'artifact name'
+        value: ${{ jobs.build.outputs.artifact-name }}
+
+env:
+  BUILD_VERSION: ""
+  PACKAGE_VERSION: ""
+  TAG_VERSION: ${{ inputs.git-tag-version }}
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-name: ${{ steps.set-artifact-name.outputs.artifact-name }}
+    steps:
+      # Checkout git repository
+      # https://github.com/actions/checkout
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ env.TAG_VERSION }}
+
+      # Setup dotnet
+      # https://github.com/actions/setup-dotnet
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # Retrieve version number from csproj
+      # Abort if a version mismatch is detected
+      #  between the kgh02017.CodeStyle project file and the kgh02017.CodeStyle.Templates project file.
+      - name: Retrieve version number from csproj
+        shell: bash
+        run: |
+          BUILD_VERSION_C=$(dotnet msbuild ./src/kgh02017.CodeStyle/kgh02017.CodeStyle.csproj -getProperty:Version)
+          BUILD_VERSION_T=$(dotnet msbuild ./src/kgh02017.CodeStyle.Templates/kgh02017.CodeStyle.Templates.csproj -getProperty:Version)
+          if [ "$BUILD_VERSION_C" != "$BUILD_VERSION_T" ]; then
+            echo "kgh02017.CodeStyle version != kgh02017.CodeStyle.Templates version"
+            exit 1
+          fi
+
+          echo "BUILD_VERSION=$BUILD_VERSION_C" >> "$GITHUB_ENV"
+
+      # Set package version
+      # Append GITHUB_RUN_NUMBER to the version number if Build mode is ci
+      - name: Set package version
+        shell: bash
+        run: |
+          if [ "${{ inputs.build-mode }}" = "ci" ]; then
+            PACKAGE_VERSION="${BUILD_VERSION}.${GITHUB_RUN_NUMBER}"
+          else
+            PACKAGE_VERSION="${BUILD_VERSION}"
+          fi
+
+          echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> "$GITHUB_ENV"
+          echo "Package Version = $PACKAGE_VERSION"
+
+      # Version Check
+      # Abort if the code version number and the git tag version do not match in release mode
+      - name: Version Check
+        shell: bash
+        run: |
+          BUILD_TAG="v${BUILD_VERSION}"
+          TAG_VERSION="${{ inputs.git-tag-version }}"
+
+          echo "Build Version = $BUILD_TAG"
+          echo "Git Tag Version = $TAG_VERSION"
+
+          if [ "$BUILD_TAG" != "$TAG_VERSION" ]; then
+            echo "Version Mismatch!"
+            exit 1
+          fi
+        if: inputs.build-mode == 'release'
+
+      # dotnet restore
+      - name: Restore
+        shell: bash
+        run: |
+          dotnet restore
+
+      # Build
+      - name: Build
+        shell: bash
+        run: |
+          dotnet build --configuration Release --no-restore -p:Version="${PACKAGE_VERSION}"
+
+      # Test
+      - name: Test
+        shell: bash
+        run: |
+          dotnet test --configuration Release --no-build
+
+      # Pack
+      - name: Pack
+        shell: bash
+        run: |
+          dotnet pack src/kgh02017.CodeStyle --configuration Release --no-build --output artifacts \
+              -p:Version="${PACKAGE_VERSION}"
+
+          dotnet pack src/kgh02017.CodeStyle.Templates --configuration Release --no-build --output artifacts \
+              -p:Version="${PACKAGE_VERSION}"
+
+      # Set up artifact name
+      - name: Set artifact name
+        id: set-artifact-name
+        shell: bash
+        run: |
+            echo "artifact-name=kgh02017.CodeStyle-${PACKAGE_VERSION}" >> "$GITHUB_OUTPUT"
+
+      # Upload artifacts
+      # https://github.com/actions/upload-artifact
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ steps.set-artifact-name.outputs.artifact-name }}
+          path: ./artifacts/*.nupkg
