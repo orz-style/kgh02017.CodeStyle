@@ -123,6 +123,11 @@ Key principles:
 * Structured logging
 * Nullable reference types enabled
 
+### Details
+
+- [.editorconfig](/src/kgh02017.CodeStyle.Templates/templates/codestyle/.editorconfig)
+- [CodeStyle.md](/src/kgh02017.CodeStyle.Templates/templates/codestyle/CodeStyle.md)
+
 ## Repository Structure
 
 ```text
