@@ -168,4 +168,126 @@ public sealed class PreferAssignmentLineBreakCodeFixProviderTests
 
         return VerifyCodeFixAsync(source, fixedSource);
     }
+
+    [Fact]
+    public Task MultiLineAwaitExpression_WhenFixed_BreaksLineAfterAssignment()
+    {
+        const string source =
+           """
+            using System.Collections.Generic;
+            using System.Linq;
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task TestAsync()
+                {
+                    var value {|KGH1007:=|} await Task.FromResult(
+                        Enumerable.Range(1, 10)
+                            .ToList());
+                }
+            }
+            """;
+
+        const string fixedSource =
+           """
+            using System.Collections.Generic;
+            using System.Linq;
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task TestAsync()
+                {
+                    var value =
+                        await Task.FromResult(
+                            Enumerable.Range(1, 10)
+                                .ToList());
+                }
+            }
+            """;
+
+        return VerifyCodeFixAsync(source, fixedSource);
+    }
+
+    [Fact]
+    public Task MultiLineAwaitFluentInvocation_WhenDeclarationHasLeadingTrivia_UsesIndentationOnly()
+    {
+        const string source =
+            """
+            using System.Collections.Generic;
+            using System.Linq;
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task TestAsync()
+                {
+                    var dbContext = new DbContext();
+
+                    // Existing spools
+                    var existingSpools {|KGH1007:=|} await dbContext.Spools
+                        .Select(s => s.ShortCode)
+                        .ToHashSetAsync();
+                }
+            }
+
+            public sealed class DbContext
+            {
+                public IQueryable<Spool> Spools { get; } = new List<Spool>().AsQueryable();
+            }
+
+            public sealed class Spool
+            {
+                public string ShortCode { get; set; } = "";
+            }
+
+            public static class AsyncExtensions
+            {
+                public static Task<HashSet<T>> ToHashSetAsync<T>(
+                    this IEnumerable<T> source) =>
+                    Task.FromResult(source.ToHashSet());
+            }
+            """;
+
+        const string fixedSource =
+            """
+            using System.Collections.Generic;
+            using System.Linq;
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task TestAsync()
+                {
+                    var dbContext = new DbContext();
+
+                    // Existing spools
+                    var existingSpools =
+                        await dbContext.Spools
+                            .Select(s => s.ShortCode)
+                            .ToHashSetAsync();
+                }
+            }
+
+            public sealed class DbContext
+            {
+                public IQueryable<Spool> Spools { get; } = new List<Spool>().AsQueryable();
+            }
+
+            public sealed class Spool
+            {
+                public string ShortCode { get; set; } = "";
+            }
+
+            public static class AsyncExtensions
+            {
+                public static Task<HashSet<T>> ToHashSetAsync<T>(
+                    this IEnumerable<T> source) =>
+                    Task.FromResult(source.ToHashSet());
+            }
+            """;
+
+        return VerifyCodeFixAsync(source, fixedSource);
+    }
 }
