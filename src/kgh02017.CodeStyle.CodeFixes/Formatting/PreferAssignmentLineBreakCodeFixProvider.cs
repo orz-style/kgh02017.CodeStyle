@@ -75,7 +75,7 @@ public sealed class PreferAssignmentLineBreakCodeFixProvider : CodeFixProvider
         }
 
         string newLine = await CodeFixUtilities.GetNewLineAsync(document, cancellationToken);
-        string declarationIndent = declaration.GetLeadingTrivia().ToFullString();
+        string declarationIndent = GetIndentation(declaration.GetLeadingTrivia());
         string valueIndent = declarationIndent + "    ";
 
         SyntaxTriviaList equalsTrailingTrivia =
@@ -83,10 +83,15 @@ public sealed class PreferAssignmentLineBreakCodeFixProvider : CodeFixProvider
 
         ExpressionSyntax adjustedValue = AddContinuationIndent(initializer.Value, newLine);
 
+        SyntaxToken equalsToken =SyntaxFactory.Token(
+            SyntaxTriviaList.Empty,
+            SyntaxKind.EqualsToken,
+            equalsTrailingTrivia);
+
         EqualsValueClauseSyntax replacement =
             initializer
-                .WithEqualsToken(initializer.EqualsToken.WithTrailingTrivia(equalsTrailingTrivia))
-                .WithValue(adjustedValue);
+                .WithEqualsToken(equalsToken)
+                .WithValue(adjustedValue.WithoutLeadingTrivia());
 
         SyntaxNode newRoot = root.ReplaceNode(initializer, replacement);
 
@@ -95,9 +100,20 @@ public sealed class PreferAssignmentLineBreakCodeFixProvider : CodeFixProvider
 
     private static ExpressionSyntax AddContinuationIndent(ExpressionSyntax expression, string newLine)
     {
-        string text = expression.ToFullString();
+        string text = expression.WithoutLeadingTrivia().ToFullString();
+
         string adjusted = text.Replace(newLine, newLine + "    ");
 
-        return SyntaxFactory.ParseExpression(adjusted);
+        return SyntaxFactory.ParseExpression(adjusted).WithoutLeadingTrivia();
+    }
+
+    private static string GetIndentation(SyntaxTriviaList leadingTrivia)
+    {
+        return string.Concat(
+            leadingTrivia
+                .Reverse()
+                .TakeWhile(trivia => trivia.IsKind(SyntaxKind.WhitespaceTrivia))
+                .Reverse()
+                .Select(trivia => trivia.ToFullString()));
     }
 }
