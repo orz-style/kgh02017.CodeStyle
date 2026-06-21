@@ -13,4 +13,5 @@ public sealed class DiagnosticIds
     public const string PreferThrowIfNull = "KGH1009";
     public const string PreferPascalCaseLoggerTemplateNames = "KGH1010";
     public const string PreferCollectionExpression = "KGH1011";
+    public const string PreferConsistentMultilineArguments = "KGH1012";
 }
