@@ -74,6 +74,7 @@ Includes all analyzers and supported code fixes.
 | KGH1010 | Logging | Warning | Use PascalCase for structured logging placeholder names |
 | KGH1011 | Readability | Warning | Use a collection expression when the collection type is apparent |
 | KGH1012 | Formatting | Warning | Use either a single-line argument list or one argument per line |
+| KGH1013 | Formatting | Warning | Use either a single-line parameter list or one parameter per line |
 
 #### Roslyn code fixes for supported style violations.
 
@@ -87,6 +88,7 @@ Includes all analyzers and supported code fixes.
 | KGH1009 | PreferThrowIfNullCodeFixProvider |
 | KGH1011 | PreferCollectionExpressionCodeFixProvider |
 | KGH1012 | PreferConsistentMultilineArgumentsCodeFixProvider |
+| KGH1013 | PreferConsistentMultilineParametersCodeFixProvider |
 
 ## Installation
 
