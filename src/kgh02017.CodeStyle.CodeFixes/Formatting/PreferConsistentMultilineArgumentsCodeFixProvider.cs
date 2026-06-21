@@ -1,0 +1,156 @@
+using System.Collections.Immutable;
+using System.Composition;
+using kgh02017.CodeStyle.Analyzers;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeActions;
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
+
+namespace kgh02017.CodeStyle.CodeFixes.Formatting;
+
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(PreferConsistentMultilineArgumentsCodeFixProvider))]
+[Shared]
+public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixProvider
+{
+    public override ImmutableArray<string> FixableDiagnosticIds => [DiagnosticIds.PreferConsistentMultilineArguments];
+
+    public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+
+    public override async Task RegisterCodeFixesAsync(CodeFixContext context)
+    {
+        SyntaxNode? root = await context.Document.GetSyntaxRootAsync(context.CancellationToken);
+
+        if (root is null)
+        {
+            return;
+        }
+
+        Diagnostic diagnostic = context.Diagnostics[0];
+
+        TextSpan span = diagnostic.Location.SourceSpan;
+
+        ArgumentListSyntax? argumentList =
+            root.FindNode(span)
+                .AncestorsAndSelf()
+                .OfType<ArgumentListSyntax>()
+                .FirstOrDefault();
+
+        if (argumentList is null)
+        {
+            return;
+        }
+
+        context.RegisterCodeFix(
+            CodeAction.Create(
+                "Use one argument per line",
+                cancellationToken =>
+                    UseOneArgumentPerLineAsync(context.Document, argumentList, cancellationToken),
+                "UseOneArgumentPerLine"),
+            diagnostic);
+
+        context.RegisterCodeFix(
+            CodeAction.Create(
+                "Use single-line argument list",
+                cancellationToken =>
+                    UseSingleLineArgumentListAsync(context.Document, argumentList, cancellationToken),
+                "UseSingleLineArgumentList"),
+            diagnostic);
+
+    }
+
+    private async Task<Document> UseOneArgumentPerLineAsync(
+        Document document,
+        ArgumentListSyntax argumentList,
+        CancellationToken cancellationToken)
+    {
+        SyntaxNode? root = await document.GetSyntaxRootAsync(cancellationToken);
+
+        if (root is null)
+        {
+            return document;
+        }
+
+        if (argumentList.Arguments.Count <= 1)
+        {
+            return document;
+        }
+
+        SeparatedSyntaxList<ArgumentSyntax> arguments = argumentList.Arguments;
+
+        string newLine = await CodeFixUtilities.GetNewLineAsync(document, cancellationToken);
+
+        StatementSyntax? statement =
+            argumentList.Ancestors()
+                .OfType<StatementSyntax>()
+                .FirstOrDefault();
+
+        string argumentIndent = GetIndentation(statement?.GetLeadingTrivia() ?? default) + "    ";
+
+        string text =
+            "(" + newLine +
+            argumentIndent +
+            string.Join(
+                "," + newLine + argumentIndent,
+                arguments.Select(a => a.ToString())) +
+            ")";
+
+        ArgumentListSyntax newArgumentList = SyntaxFactory.ParseArgumentList(text);
+
+        newArgumentList =
+            newArgumentList.WithCloseParenToken(
+                newArgumentList.CloseParenToken
+                    .WithTrailingTrivia(argumentList.CloseParenToken.TrailingTrivia));
+
+        SyntaxNode newRoot = root.ReplaceNode(argumentList, newArgumentList);
+
+        return document.WithSyntaxRoot(newRoot);
+    }
+
+    private async Task<Document> UseSingleLineArgumentListAsync(
+        Document document,
+        ArgumentListSyntax argumentList,
+        CancellationToken cancellationToken)
+    {
+        SyntaxNode? root = await document.GetSyntaxRootAsync(cancellationToken);
+
+        if (root is null)
+        {
+            return document;
+        }
+
+        if (argumentList.Arguments.Count <= 1)
+        {
+            return document;
+        }
+
+        SeparatedSyntaxList<ArgumentSyntax> arguments = argumentList.Arguments;
+
+        string text =
+            "(" +
+            string.Join(", ", arguments.Select(a => a.ToString())) +
+            ")";
+
+        ArgumentListSyntax newArgumentList = SyntaxFactory.ParseArgumentList(text);
+
+        newArgumentList =
+            newArgumentList.WithCloseParenToken(
+                newArgumentList.CloseParenToken
+                    .WithTrailingTrivia(argumentList.CloseParenToken.TrailingTrivia));
+
+        SyntaxNode newRoot = root.ReplaceNode(argumentList, newArgumentList);
+
+        return document.WithSyntaxRoot(newRoot);
+    }
+
+    private static string GetIndentation(SyntaxTriviaList leadingTrivia)
+    {
+        return string.Concat(
+            leadingTrivia
+                .Reverse()
+                .TakeWhile(trivia => trivia.IsKind(SyntaxKind.WhitespaceTrivia))
+                .Reverse()
+                .Select(trivia => trivia.ToFullString()));
+    }
+}

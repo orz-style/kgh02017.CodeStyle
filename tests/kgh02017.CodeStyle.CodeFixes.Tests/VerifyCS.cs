@@ -21,4 +21,18 @@ internal static class VerifyCS<TAnalyzer, TCodeFix>
 
         return test.RunAsync();
     }
+
+    public static Task VerifyCodeFixAsync(string source, string fixedSource, string? equivalenceKey = null)
+    {
+        var test =
+            new CSharpCodeFixTest<TAnalyzer, TCodeFix, DefaultVerifier>
+            {
+                TestCode = source,
+                FixedCode = fixedSource,
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net90,
+                CodeActionEquivalenceKey = equivalenceKey,
+            };
+
+        return test.RunAsync();
+    }
 }
