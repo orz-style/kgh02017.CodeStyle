@@ -39,9 +39,15 @@ public class PreferConsistentMultilineParametersAnalyzer : DiagnosticAnalyzer
 
         int openParenLine = parameterList.OpenParenToken.GetLocation().GetLineSpan().StartLinePosition.Line;
         int endParenLine = parameterList.CloseParenToken.GetLocation().GetLineSpan().StartLinePosition.Line;
+        int firstParameterLine = parameters[0].GetLocation().GetLineSpan().StartLinePosition.Line;
 
         if (openParenLine == endParenLine)
         {
+            return;
+        }
+        else if (openParenLine == firstParameterLine)
+        {
+            context.ReportDiagnostic(Diagnostic.Create(s_rule, parameterList.GetLocation()));
             return;
         }
 

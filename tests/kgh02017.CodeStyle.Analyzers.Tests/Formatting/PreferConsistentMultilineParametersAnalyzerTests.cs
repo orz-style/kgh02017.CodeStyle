@@ -100,4 +100,28 @@ public sealed class PreferConsistentMultilineParametersAnalyzerTests
 
         return VerifyAnalyzerAsync(source);
     }
+
+    [Fact]
+    public Task Declaration_WhenFirstParameterAreOnSameLineAsOpenParen_ReportsDiagnostic()
+    {
+        const string source =
+           """
+            public sealed class TestClass
+            {
+                public void Test()
+                {
+                    int sum = Sum(1, 2, 3);
+                }
+
+                public int Sum{|KGH1013:(int x,
+                    int y,
+                    int z)|}
+                {
+                    return x + y + z;
+                }
+            }
+            """;
+
+        return VerifyAnalyzerAsync(source);
+    }
 }
