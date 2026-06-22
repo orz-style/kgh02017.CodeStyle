@@ -86,7 +86,14 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
                 .OfType<StatementSyntax>()
                 .FirstOrDefault();
 
-        string argumentIndent = GetIndentation(statement?.GetLeadingTrivia() ?? default) + "    ";
+        SourceText sourceText = await document.GetTextAsync(cancellationToken);
+
+        string baseIndent =
+            GetLineIndentation(
+                sourceText,
+                argumentList.OpenParenToken.SpanStart);
+
+        string argumentIndent = baseIndent + "    ";
 
         string text =
             "(" + newLine +
@@ -144,13 +151,11 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
         return document.WithSyntaxRoot(newRoot);
     }
 
-    private static string GetIndentation(SyntaxTriviaList leadingTrivia)
+    private static string GetLineIndentation(SourceText text, int position)
     {
-        return string.Concat(
-            leadingTrivia
-                .Reverse()
-                .TakeWhile(trivia => trivia.IsKind(SyntaxKind.WhitespaceTrivia))
-                .Reverse()
-                .Select(trivia => trivia.ToFullString()));
+        TextLine line = text.Lines.GetLineFromPosition(position);
+        string lineText = line.ToString();
+
+        return new string(lineText.TakeWhile(char.IsWhiteSpace).ToArray());
     }
 }
