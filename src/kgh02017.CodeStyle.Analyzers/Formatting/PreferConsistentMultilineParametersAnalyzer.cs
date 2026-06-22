@@ -24,13 +24,12 @@ public class PreferConsistentMultilineParametersAnalyzer : DiagnosticAnalyzer
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-        context.RegisterSyntaxNodeAction(AnalyzeMethodDeclaration, SyntaxKind.MethodDeclaration);
+        context.RegisterSyntaxNodeAction(AnalyzeParameterList, SyntaxKind.ParameterList);
     }
 
-    private void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context)
+    private void AnalyzeParameterList(SyntaxNodeAnalysisContext context)
     {
-        var declaration = (MethodDeclarationSyntax)context.Node;
-        ParameterListSyntax parameterList = declaration.ParameterList;
+        var parameterList = (ParameterListSyntax)context.Node;
         SeparatedSyntaxList<ParameterSyntax> parameters = parameterList.Parameters;
 
         if (parameters.Count <= 1)

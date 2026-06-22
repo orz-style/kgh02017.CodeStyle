@@ -131,4 +131,48 @@ public sealed class PreferConsistentMultilineParametersCodeFixProviderTests
 
         return VerifyCodeFixAsync(source, fixedSource, "UseOneParameterPerLine");
     }
+
+    [Fact]
+    public Task Constructor_WhenFixedWithOneParameterPerLine_FormatsParameters()
+    {
+        const string source =
+            """
+            public class Person
+            {
+               private string _last;
+               private string _first;
+               private int _age;
+
+               public Person{|KGH1013:(string lastName,
+                   string firstName, int age)|}
+               {
+                  _last = lastName;
+                  _first = firstName;
+                  _age = age;
+               }
+            }
+            """;
+
+        const string fixedSource =
+            """
+            public class Person
+            {
+               private string _last;
+               private string _first;
+               private int _age;
+
+               public Person(
+                   string lastName,
+                   string firstName,
+                   int age)
+               {
+                  _last = lastName;
+                  _first = firstName;
+                  _age = age;
+               }
+            }
+            """;
+
+        return VerifyCodeFixAsync(source, fixedSource, "UseOneParameterPerLine");
+    }
 }

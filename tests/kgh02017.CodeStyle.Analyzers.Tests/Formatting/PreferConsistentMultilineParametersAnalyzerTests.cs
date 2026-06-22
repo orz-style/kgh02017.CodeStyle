@@ -76,4 +76,28 @@ public sealed class PreferConsistentMultilineParametersAnalyzerTests
 
         return VerifyAnalyzerAsync(source);
     }
+
+    [Fact]
+    public Task Constructor_WhenMultipleParametersOnSameLine_ReportsDiagnostic()
+    {
+        const string source =
+           """
+            public class Person
+            {
+               private string _last;
+               private string _first;
+               private int _age;
+
+               public Person{|KGH1013:(string lastName,
+                    string firstName, int age)|}
+               {
+                  _last = lastName;
+                  _first = firstName;
+                  _age = age;
+               }
+            }
+            """;
+
+        return VerifyAnalyzerAsync(source);
+    }
 }
