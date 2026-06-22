@@ -33,7 +33,7 @@ public class PreferConsistentMultilineParametersAnalyzer : DiagnosticAnalyzer
         ParameterListSyntax parameterList = declaration.ParameterList;
         SeparatedSyntaxList<ParameterSyntax> parameters = parameterList.Parameters;
 
-        if(parameters.Count <= 1)
+        if (parameters.Count <= 1)
         {
             return;
         }
