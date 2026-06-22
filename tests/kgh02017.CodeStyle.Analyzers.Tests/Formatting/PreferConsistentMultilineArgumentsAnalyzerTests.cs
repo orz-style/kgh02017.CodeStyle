@@ -75,4 +75,36 @@ public sealed class PreferConsistentMultilineArgumentsAnalyzerTests
 
         return VerifyAnalyzerAsync(source);
     }
+
+    [Fact]
+    public Task ObjectCreation_WhenMultipleArgumentsOnSameLine_ReportsDiagnostic()
+    {
+        const string source =
+           """
+            public sealed class TestClass
+            {
+                public void Test()
+                {
+                    var p = new Person{|KGH1012:("Taro",
+                        "Yamada", 25)|};
+                }
+            }
+
+            public class Person
+            {
+               private string _last;
+               private string _first;
+               private int _age;
+
+               public Person(string lastName, string firstName, int age)
+               {
+                  _last = lastName;
+                  _first = firstName;
+                  _age = age;
+               }
+            }
+            """;
+
+        return VerifyAnalyzerAsync(source);
+    }
 }

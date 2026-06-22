@@ -24,13 +24,12 @@ public class PreferConsistentMultilineArgumentsAnalyzer : DiagnosticAnalyzer
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-        context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
+        context.RegisterSyntaxNodeAction(AnalyzeArgumentList, SyntaxKind.ArgumentList);
     }
 
-    private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
+    private void AnalyzeArgumentList(SyntaxNodeAnalysisContext context)
     {
-        var invocation = (InvocationExpressionSyntax)context.Node;
-        ArgumentListSyntax argumentList = invocation.ArgumentList;
+        var argumentList = (ArgumentListSyntax)context.Node;
         SeparatedSyntaxList<ArgumentSyntax> args = argumentList.Arguments;
 
         if (args.Count <= 1)
