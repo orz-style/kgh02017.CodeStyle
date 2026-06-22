@@ -233,4 +233,47 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProviderTests
 
         return VerifyCodeFixAsync(source, fixedSource, "UseSingleLineArgumentList");
     }
+
+    [Fact]
+    public Task Invocation_WhenFirstArgumentIsOnSameLineAsOpenParen_FormatsParameters()
+    {
+        const string source =
+            """
+            public sealed class TestClass
+            {
+                public void Test()
+                {
+                    int sum = Sum{|KGH1012:(1,
+                        2,
+                        3)|};
+                }
+
+                public int Sum(int x, int y, int z)
+                {
+                    return x + y + z;
+                }
+            }
+            """;
+
+        const string fixedSource =
+            """
+            public sealed class TestClass
+            {
+                public void Test()
+                {
+                    int sum = Sum(
+                        1,
+                        2,
+                        3);
+                }
+
+                public int Sum(int x, int y, int z)
+                {
+                    return x + y + z;
+                }
+            }
+            """;
+
+        return VerifyCodeFixAsync(source, fixedSource, "UseOneArgumentPerLine");
+    }
 }
