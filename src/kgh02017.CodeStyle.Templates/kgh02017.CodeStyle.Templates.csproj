@@ -5,7 +5,7 @@
 
     <PackageId>kgh02017.CodeStyle.Templates</PackageId>
     <PackageType>Template</PackageType>
-    <Version>1.0.0-preview.3</Version>
+    <Version>1.0.0-preview.4</Version>
     <Authors>Taku Izumi</Authors>
     <Description>Code style templates for .NET projects.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
