@@ -59,7 +59,7 @@ public sealed class PreferConsistentMultilineParametersCodeFixProvider : CodeFix
             diagnostic);
     }
 
-    private async Task<Document> UseOneParameterPerLineAsync(
+    private static async Task<Document> UseOneParameterPerLineAsync(
         Document document,
         ParameterListSyntax parameterList,
         CancellationToken cancellationToken)
@@ -107,7 +107,7 @@ public sealed class PreferConsistentMultilineParametersCodeFixProvider : CodeFix
         return document.WithSyntaxRoot(newRoot);
     }
 
-    private async Task<Document> UseSingleLineParameterListAsync(
+    private static async Task<Document> UseSingleLineParameterListAsync(
         Document document,
         ParameterListSyntax parameterList,
         CancellationToken cancellationToken)
