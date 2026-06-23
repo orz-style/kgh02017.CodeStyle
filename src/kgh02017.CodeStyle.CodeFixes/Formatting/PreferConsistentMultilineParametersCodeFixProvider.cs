@@ -80,9 +80,9 @@ public sealed class PreferConsistentMultilineParametersCodeFixProvider : CodeFix
 
         string newLine = await CodeFixUtilities.GetNewLineAsync(document, cancellationToken);
 
-        MethodDeclarationSyntax? declaration =
+        BaseMethodDeclarationSyntax? declaration =
             parameterList.Ancestors()
-                .OfType<MethodDeclarationSyntax>()
+                .OfType<BaseMethodDeclarationSyntax>()
                 .FirstOrDefault();
 
         string parameterIndent = GetIndentation(declaration?.GetLeadingTrivia() ?? default) + "    ";

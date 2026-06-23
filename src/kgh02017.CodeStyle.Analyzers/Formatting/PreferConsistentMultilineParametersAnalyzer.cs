@@ -24,25 +24,30 @@ public class PreferConsistentMultilineParametersAnalyzer : DiagnosticAnalyzer
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-        context.RegisterSyntaxNodeAction(AnalyzeMethodDeclaration, SyntaxKind.MethodDeclaration);
+        context.RegisterSyntaxNodeAction(AnalyzeParameterList, SyntaxKind.ParameterList);
     }
 
-    private void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context)
+    private void AnalyzeParameterList(SyntaxNodeAnalysisContext context)
     {
-        var declaration = (MethodDeclarationSyntax)context.Node;
-        ParameterListSyntax parameterList = declaration.ParameterList;
+        var parameterList = (ParameterListSyntax)context.Node;
         SeparatedSyntaxList<ParameterSyntax> parameters = parameterList.Parameters;
 
-        if(parameters.Count <= 1)
+        if (parameters.Count <= 1)
         {
             return;
         }
 
         int openParenLine = parameterList.OpenParenToken.GetLocation().GetLineSpan().StartLinePosition.Line;
         int endParenLine = parameterList.CloseParenToken.GetLocation().GetLineSpan().StartLinePosition.Line;
+        int firstParameterLine = parameters[0].GetLocation().GetLineSpan().StartLinePosition.Line;
 
         if (openParenLine == endParenLine)
         {
+            return;
+        }
+        else if (openParenLine == firstParameterLine)
+        {
+            context.ReportDiagnostic(Diagnostic.Create(s_rule, parameterList.GetLocation()));
             return;
         }
 
