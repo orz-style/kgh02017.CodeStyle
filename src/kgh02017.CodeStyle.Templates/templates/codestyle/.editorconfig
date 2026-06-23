@@ -1,5 +1,5 @@
 # EditorConfig
-# Updated: 2026-06-01
+# Updated: 2026-06-22
 
 ##########################################
 # Common Settings
@@ -342,9 +342,9 @@ dotnet_naming_style.camelcase.capitalization = camel_case
 # Roslyn Analyzer Rules
 ##########################################
 
-#### StyleCop.Analyzer ####
-
 [*.cs]
+
+#### StyleCop.Analyzer ####
 # SA1101: Prefix local calls with this
 dotnet_diagnostic.SA1101.severity = none
 # SA1200: Using directives should be placed correctly
@@ -365,3 +365,7 @@ dotnet_diagnostic.SA1633.severity = none
 dotnet_diagnostic.SA1642.severity = none
 # SA1643: Destructor summary documentation should begin with standard text
 dotnet_diagnostic.SA1643.severity = none
+
+#### Microsoft.CodeAnalysis.NetAnalyzers ####
+# CA1873: Avoid potentially expensive logging
+dotnet_diagnostic.CA1873.severity = silent
