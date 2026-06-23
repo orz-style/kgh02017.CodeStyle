@@ -1,5 +1,5 @@
 # EditorConfig
-# Updated: 2026-06-22
+# Updated: 2026-06-23
 
 ##########################################
 # Common Settings
@@ -369,3 +369,7 @@ dotnet_diagnostic.SA1643.severity = none
 #### Microsoft.CodeAnalysis.NetAnalyzers ####
 # CA1873: Avoid potentially expensive logging
 dotnet_diagnostic.CA1873.severity = silent
+
+#### Microsoft.CodeAnalysis.CodeStyle ####
+# IDE0305: Collection initialization can be simplified
+dotnet_diagnostic.IDE0305.severity = silent
