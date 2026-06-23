@@ -60,7 +60,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
 
     }
 
-    private async Task<Document> UseOneArgumentPerLineAsync(
+    private static async Task<Document> UseOneArgumentPerLineAsync(
         Document document,
         ArgumentListSyntax argumentList,
         CancellationToken cancellationToken)
@@ -115,7 +115,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
         return document.WithSyntaxRoot(newRoot);
     }
 
-    private async Task<Document> UseSingleLineArgumentListAsync(
+    private static async Task<Document> UseSingleLineArgumentListAsync(
         Document document,
         ArgumentListSyntax argumentList,
         CancellationToken cancellationToken)
