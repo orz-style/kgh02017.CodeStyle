@@ -39,7 +39,8 @@ public sealed class PreferConsistentMultilineArgumentsAnalyzerTests
             {
                 public void Test()
                 {
-                    int sum = Sum(1,
+                    int sum = Sum(
+                                  1,
                                   2,
                                   3);
                 }
@@ -64,6 +65,62 @@ public sealed class PreferConsistentMultilineArgumentsAnalyzerTests
                 public void Test()
                 {
                     int sum = Sum(1, 2, 3);
+                }
+
+                public int Sum(int x, int y, int z)
+                {
+                    return x + y + z;
+                }
+            }
+            """;
+
+        return VerifyAnalyzerAsync(source);
+    }
+
+    [Fact]
+    public Task ObjectCreation_WhenMultipleArgumentsOnSameLine_ReportsDiagnostic()
+    {
+        const string source =
+           """
+            public sealed class TestClass
+            {
+                public void Test()
+                {
+                    var p = new Person{|KGH1012:("Taro",
+                        "Yamada", 25)|};
+                }
+            }
+
+            public class Person
+            {
+               private string _last;
+               private string _first;
+               private int _age;
+
+               public Person(string lastName, string firstName, int age)
+               {
+                  _last = lastName;
+                  _first = firstName;
+                  _age = age;
+               }
+            }
+            """;
+
+        return VerifyAnalyzerAsync(source);
+    }
+
+    [Fact]
+    public Task Invocation_WhenFirstArgumentIsOnSameLineAsOpenParen_ReportsDiagnostic()
+    {
+        const string source =
+           """
+            public sealed class TestClass
+            {
+                public void Test()
+                {
+                    int sum = Sum{|KGH1012:(1,
+                                2,
+                                3)|};
                 }
 
                 public int Sum(int x, int y, int z)

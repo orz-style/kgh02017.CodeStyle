@@ -24,13 +24,12 @@ public class PreferConsistentMultilineArgumentsAnalyzer : DiagnosticAnalyzer
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-        context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
+        context.RegisterSyntaxNodeAction(AnalyzeArgumentList, SyntaxKind.ArgumentList);
     }
 
-    private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
+    private void AnalyzeArgumentList(SyntaxNodeAnalysisContext context)
     {
-        var invocation = (InvocationExpressionSyntax)context.Node;
-        ArgumentListSyntax argumentList = invocation.ArgumentList;
+        var argumentList = (ArgumentListSyntax)context.Node;
         SeparatedSyntaxList<ArgumentSyntax> args = argumentList.Arguments;
 
         if (args.Count <= 1)
@@ -40,9 +39,15 @@ public class PreferConsistentMultilineArgumentsAnalyzer : DiagnosticAnalyzer
 
         int openParenLine = argumentList.OpenParenToken.GetLocation().GetLineSpan().StartLinePosition.Line;
         int endParenLine = argumentList.CloseParenToken.GetLocation().GetLineSpan().StartLinePosition.Line;
+        int firstArgumentLine = args[0].GetLocation().GetLineSpan().StartLinePosition.Line;
 
         if (openParenLine == endParenLine)
         {
+            return;
+        }
+        else if (openParenLine == firstArgumentLine)
+        {
+            context.ReportDiagnostic(Diagnostic.Create(s_rule, argumentList.GetLocation()));
             return;
         }
 
