@@ -1,5 +1,5 @@
 # EditorConfig
-# Updated: 2026-06-23
+# Updated: 2026-06-25
 
 ##########################################
 # Common Settings
@@ -367,6 +367,8 @@ dotnet_diagnostic.SA1642.severity = none
 dotnet_diagnostic.SA1643.severity = none
 
 #### Microsoft.CodeAnalysis.NetAnalyzers ####
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = silent
 # CA1873: Avoid potentially expensive logging
 dotnet_diagnostic.CA1873.severity = silent
 
