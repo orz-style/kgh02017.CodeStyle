@@ -1,5 +1,5 @@
 # EditorConfig
-# Updated: 2026-06-25
+# Updated: 2026-06-27
 
 ##########################################
 # Common Settings
@@ -375,3 +375,13 @@ dotnet_diagnostic.CA1873.severity = silent
 #### Microsoft.CodeAnalysis.CodeStyle ####
 # IDE0305: Collection initialization can be simplified
 dotnet_diagnostic.IDE0305.severity = silent
+
+#### Meziantou.Analyzer ####
+# MA0004: Use Task.ConfigureAwait
+dotnet_diagnostic.MA0004.severity = silent
+# MA0042: Use 'CancelAsync' instead of 'Cancel'
+dotnet_diagnostic.MA0042.severity = silent
+# MA0051: Method is too long
+dotnet_diagnostic.MA0051.severity = silent
+# MA0147: Avoid async void method for delegate
+dotnet_diagnostic.MA0147.severity = silent
