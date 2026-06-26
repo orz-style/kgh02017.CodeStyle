@@ -100,7 +100,8 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
             argumentIndent +
             string.Join(
                 "," + newLine + argumentIndent,
-                arguments.Select(a => a.ToString())) +
+                arguments.Select(argument =>
+                    FormatMultilineItem(argument, newLine, argumentIndent))) +
             ")";
 
         ArgumentListSyntax newArgumentList = SyntaxFactory.ParseArgumentList(text);
@@ -157,5 +158,44 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
         string lineText = line.ToString();
 
         return new string(lineText.TakeWhile(char.IsWhiteSpace).ToArray());
+    }
+
+    private static string FormatMultilineItem(SyntaxNode node, string newLine, string indent)
+    {
+        string text = node.ToString();
+        string[] lines = text.Split([newLine], StringSplitOptions.None);
+
+        if (lines.Length <= 1)
+        {
+            return text;
+        }
+
+        string baseIndent =
+            lines
+                .Skip(1)
+                .Where(line => line.Length > 0)
+                .Select(GetIndentation)
+                .DefaultIfEmpty("")
+                .OrderBy(value => value.Length)
+                .First();
+
+        return string.Join(
+            newLine,
+            lines.Select((line, index) =>
+                index == 0
+                    ? line
+                    : indent + RemovePrefix(line, baseIndent)));
+    }
+
+    private static string GetIndentation(string line)
+    {
+        return new string(line.TakeWhile(char.IsWhiteSpace).ToArray());
+    }
+
+    private static string RemovePrefix(string text, string prefix)
+    {
+        return text.StartsWith(prefix, StringComparison.Ordinal)
+            ? text.Substring(prefix.Length)
+            : text;
     }
 }
