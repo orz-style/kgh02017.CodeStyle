@@ -32,7 +32,7 @@ public class PreferConsistentMultilineArgumentsAnalyzer : DiagnosticAnalyzer
         var argumentList = (ArgumentListSyntax)context.Node;
         SeparatedSyntaxList<ArgumentSyntax> args = argumentList.Arguments;
 
-        if (args.Count <= 1)
+        if (args.Count == 0)
         {
             return;
         }

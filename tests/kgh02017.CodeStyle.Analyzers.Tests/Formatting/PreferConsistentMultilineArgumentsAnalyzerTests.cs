@@ -132,4 +132,27 @@ public sealed class PreferConsistentMultilineArgumentsAnalyzerTests
 
         return VerifyAnalyzerAsync(source);
     }
+
+    [Fact]
+    public Task Invocation_WhenSingleMultilineArgumentStartsOnOpenParenLine_ReportsDiagnostic()
+    {
+        const string source =
+           """
+            using System;
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task Test()
+                {
+                    await Task.Run{|KGH1012:(() =>
+                    {
+                        Console.WriteLine("Hello");
+                    })|};
+                }
+            }
+            """;
+
+        return VerifyAnalyzerAsync(source);
+    }
 }

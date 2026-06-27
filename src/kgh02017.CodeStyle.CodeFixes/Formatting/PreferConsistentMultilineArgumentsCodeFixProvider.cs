@@ -72,7 +72,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
             return document;
         }
 
-        if (argumentList.Arguments.Count <= 1)
+        if (argumentList.Arguments.Count == 0)
         {
             return document;
         }
@@ -128,7 +128,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
             return document;
         }
 
-        if (argumentList.Arguments.Count <= 1)
+        if (argumentList.Arguments.Count == 0)
         {
             return document;
         }
