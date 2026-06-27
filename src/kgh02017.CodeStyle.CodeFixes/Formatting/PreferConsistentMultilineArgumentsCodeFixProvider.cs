@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Composition;
+using System.Diagnostics;
 using kgh02017.CodeStyle.Analyzers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -72,7 +73,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
             return document;
         }
 
-        if (argumentList.Arguments.Count <= 1)
+        if (argumentList.Arguments.Count == 0)
         {
             return document;
         }
@@ -95,20 +96,30 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
 
         string argumentIndent = baseIndent + "    ";
 
-        string text =
-            "(" + newLine +
-            argumentIndent +
-            string.Join(
-                "," + newLine + argumentIndent,
-                arguments.Select(a => a.ToString())) +
-            ")";
+        SyntaxTriviaList argumentLeadingTrivia =
+            SyntaxFactory.TriviaList(
+                SyntaxFactory.EndOfLine(newLine),
+                SyntaxFactory.Whitespace(argumentIndent));
 
-        ArgumentListSyntax newArgumentList = SyntaxFactory.ParseArgumentList(text);
 
-        newArgumentList =
-            newArgumentList.WithCloseParenToken(
-                newArgumentList.CloseParenToken
-                    .WithTrailingTrivia(argumentList.CloseParenToken.TrailingTrivia));
+        SeparatedSyntaxList<ArgumentSyntax> newArguments =
+            SyntaxFactory.SeparatedList(
+                arguments.Select(argument =>
+                    NormalizeArgumentForMultiLine(argument, newLine, argumentIndent)),
+                arguments
+                    .GetSeparators()
+                    .Select(separator =>
+                        separator.WithTrailingTrivia(argumentLeadingTrivia)));
+
+        ArgumentListSyntax newArgumentList =
+            argumentList
+                .WithOpenParenToken(
+                    argumentList.OpenParenToken.WithTrailingTrivia(argumentLeadingTrivia))
+                .WithArguments(newArguments)
+                .WithCloseParenToken(
+                    argumentList.CloseParenToken
+                        .WithLeadingTrivia()
+                        .WithTrailingTrivia(argumentList.CloseParenToken.TrailingTrivia));
 
         SyntaxNode newRoot = root.ReplaceNode(argumentList, newArgumentList);
 
@@ -127,24 +138,26 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
             return document;
         }
 
-        if (argumentList.Arguments.Count <= 1)
+        if (argumentList.Arguments.Count == 0)
         {
             return document;
         }
 
         SeparatedSyntaxList<ArgumentSyntax> arguments = argumentList.Arguments;
 
-        string text =
-            "(" +
-            string.Join(", ", arguments.Select(a => a.ToString())) +
-            ")";
+        SeparatedSyntaxList<ArgumentSyntax> newArguments =
+            SyntaxFactory.SeparatedList(
+                arguments.Select(NormalizeArgumentForSingleLine));
 
-        ArgumentListSyntax newArgumentList = SyntaxFactory.ParseArgumentList(text);
-
-        newArgumentList =
-            newArgumentList.WithCloseParenToken(
-                newArgumentList.CloseParenToken
-                    .WithTrailingTrivia(argumentList.CloseParenToken.TrailingTrivia));
+        ArgumentListSyntax newArgumentList =
+            argumentList
+                .WithOpenParenToken(
+                    argumentList.OpenParenToken.WithTrailingTrivia())
+                .WithArguments(newArguments)
+                .WithCloseParenToken(
+                    argumentList.CloseParenToken
+                        .WithLeadingTrivia()
+                        .WithTrailingTrivia(argumentList.CloseParenToken.TrailingTrivia));
 
         SyntaxNode newRoot = root.ReplaceNode(argumentList, newArgumentList);
 
@@ -158,4 +171,62 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
 
         return new string(lineText.TakeWhile(char.IsWhiteSpace).ToArray());
     }
+
+    private static string GetIndentation(string line)
+    {
+        return new string(line.TakeWhile(char.IsWhiteSpace).ToArray());
+    }
+
+    private static string RemovePrefix(string text, string prefix)
+    {
+        return text.StartsWith(prefix, StringComparison.Ordinal)
+            ? text.Substring(prefix.Length)
+            : text;
+    }
+
+    private static ArgumentSyntax NormalizeArgumentForSingleLine(ArgumentSyntax argument)
+    {
+        return argument
+            .WithoutTrivia()
+            .NormalizeWhitespace();
+    }
+
+    private static ArgumentSyntax NormalizeArgumentForMultiLine(
+        ArgumentSyntax argument,
+        string newLine,
+        string argumentIndent)
+    {
+        string text = argument.ToString();
+        string[] lines = text.Split([newLine], StringSplitOptions.None);
+
+        if (lines.Length <= 1)
+        {
+            return argument
+                .WithoutLeadingTrivia()
+                .WithoutTrailingTrivia();
+        }
+
+        string baseIndent =
+            lines
+                .Skip(1)
+                .Where(line => line.Length > 0)
+                .Select(GetIndentation)
+                .DefaultIfEmpty("")
+                .OrderBy(value => value.Length)
+                .First();
+
+        string adjustedText =
+            string.Join(
+                newLine,
+                lines.Select((line, index) =>
+                    index == 0
+                        ? line
+                        : argumentIndent + RemovePrefix(line, baseIndent)));
+
+        return argument
+            .WithExpression(SyntaxFactory.ParseExpression(adjustedText))
+            .WithoutLeadingTrivia()
+            .WithoutTrailingTrivia();
+    }
+
 }

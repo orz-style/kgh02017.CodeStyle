@@ -320,4 +320,124 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProviderTests
 
         return VerifyCodeFixAsync(source, fixedSource, "UseOneArgumentPerLine");
     }
+
+    [Fact]
+    public Task Invocation_WhenArgumentIsMultilineLambda_IndentsLambdaBody()
+    {
+        const string source =
+            """
+            public sealed class TestClass
+            {
+                public void Test()
+                {
+                    Run{|KGH1012:(() =>
+                    {
+                        int value = 1;
+                    }, 10)|};
+                }
+
+                public void Run(System.Action action, int value)
+                {
+                }
+            }
+            """;
+
+        const string fixedSource =
+            """
+            public sealed class TestClass
+            {
+                public void Test()
+                {
+                    Run(
+                        () =>
+                        {
+                            int value = 1;
+                        },
+                        10);
+                }
+
+                public void Run(System.Action action, int value)
+                {
+                }
+            }
+            """;
+
+        return VerifyCodeFixAsync(source, fixedSource, "UseOneArgumentPerLine");
+    }
+
+    [Fact]
+    public Task Invocation_WhenMultilineLamdaArgumentStartsOnOpenParenLine_FormatsOneArgumentPerLine()
+    {
+        const string source =
+           """
+            using System;
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task Test()
+                {
+                    await Task.Run{|KGH1012:(() =>
+                    {
+                        Console.WriteLine("Hello");
+                    })|};
+                }
+            }
+            """;
+
+        const string fixedSource =
+            """
+            using System;
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task Test()
+                {
+                    await Task.Run(
+                        () =>
+                        {
+                            Console.WriteLine("Hello");
+                        });
+                }
+            }
+            """;
+
+        return VerifyCodeFixAsync(source, fixedSource, "UseOneArgumentPerLine");
+    }
+
+    [Fact]
+    public Task Invocation_WhenMultilineLamdaArgumentStartsOnOpenParenLine_FormatsSingleLineArguments()
+    {
+        const string source =
+           """
+            using System;
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task Test()
+                {
+                    await Task.Run{|KGH1012:(() =>
+                        Console.WriteLine("Hello"))|};
+                }
+            }
+            """;
+
+        const string fixedSource =
+            """
+            using System;
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task Test()
+                {
+                    await Task.Run(() => Console.WriteLine("Hello"));
+                }
+            }
+            """;
+
+        return VerifyCodeFixAsync(source, fixedSource, "UseSingleLineArgumentList");
+    }
 }
