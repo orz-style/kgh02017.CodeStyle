@@ -131,4 +131,53 @@ public sealed class PreferAssignmentLineBreakAnalyzerTests
         return VerifyAnalyzerAsync(source);
     }
 
+    [Fact]
+    public Task Assignment_WhenRightHandSideIsMultiline_ReportsDiagnostic()
+    {
+        const string source =
+           """
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task Test()
+                {
+                    int value = 0;
+                    value {|KGH1007:=|} await GetValueAsync()
+                        .ConfigureAwait(false);
+                }
+
+                private async Task<int> GetValueAsync()
+                {
+                    await Task.Delay(1000);
+                    return 0;
+                }
+            }
+            """;
+
+        return VerifyAnalyzerAsync(source);
+    }
+
+    [Fact]
+    public Task AddAssignment_WhenRightHandSideIsMultiline_ReportsDiagnostic()
+    {
+        const string source =
+           """
+            using System;
+
+            public sealed class TestClass
+            {
+                public event EventHandler Handler;
+
+                public void Test()
+                {
+                    Handler {|KGH1007:+=|} (_, _) =>
+                    {
+                    };
+                }
+            }
+            """;
+
+        return VerifyAnalyzerAsync(source);
+    }
 }

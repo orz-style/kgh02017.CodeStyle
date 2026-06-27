@@ -25,6 +25,10 @@ public class PreferAssignmentLineBreakAnalyzer : DiagnosticAnalyzer
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
         context.RegisterSyntaxNodeAction(AnalyzeDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
+        context.RegisterSyntaxNodeAction(
+            AnalyzeAssignmentExpression,
+            SyntaxKind.SimpleAssignmentExpression,
+            SyntaxKind.AddAssignmentExpression);
     }
 
     private static void AnalyzeDeclarationStatement(SyntaxNodeAnalysisContext context)
@@ -58,5 +62,26 @@ public class PreferAssignmentLineBreakAnalyzer : DiagnosticAnalyzer
         }
 
         context.ReportDiagnostic(Diagnostic.Create(s_rule, initializer.EqualsToken.GetLocation()));
+    }
+
+    private static void AnalyzeAssignmentExpression(SyntaxNodeAnalysisContext context)
+    {
+        var assignment = (AssignmentExpressionSyntax)context.Node;
+
+        ExpressionSyntax value = assignment.Right;
+        SyntaxToken operatorToken = assignment.OperatorToken;
+
+        FileLinePositionSpan valueSpan = value.GetLocation().GetLineSpan();
+        FileLinePositionSpan operatorTokenSpan = operatorToken.GetLocation().GetLineSpan();
+
+        bool isMultiLine = valueSpan.StartLinePosition.Line != valueSpan.EndLinePosition.Line;
+        bool startsOnOperatorLine = valueSpan.StartLinePosition.Line == operatorTokenSpan.StartLinePosition.Line;
+
+        if (!isMultiLine || !startsOnOperatorLine)
+        {
+            return;
+        }
+
+        context.ReportDiagnostic(Diagnostic.Create(s_rule, operatorToken.GetLocation()));
     }
 }

@@ -31,14 +31,13 @@ public sealed class PreferAssignmentLineBreakCodeFixProvider : CodeFixProvider
 
         TextSpan span = diagnostic.Location.SourceSpan;
 
-        EqualsValueClauseSyntax? initializer =
+        SyntaxNode? target =
             root.FindToken(span.Start)
                 .Parent?
                 .AncestorsAndSelf()
-                .OfType<EqualsValueClauseSyntax>()
-                .FirstOrDefault();
+                .FirstOrDefault(node => node is EqualsValueClauseSyntax or AssignmentExpressionSyntax);
 
-        if (initializer is null)
+        if (target is null)
         {
             return;
         }
@@ -47,10 +46,27 @@ public sealed class PreferAssignmentLineBreakCodeFixProvider : CodeFixProvider
             CodeAction.Create(
                 "Use assignment line break",
                 cancellationToken =>
-                    UseAssignmentLineBreakAsync(context.Document, initializer, cancellationToken),
+                    {
+                        return target switch
+                        {
+                            EqualsValueClauseSyntax initializer =>
+                                UseAssignmentLineBreakAsync(
+                                    context.Document,
+                                    initializer,
+                                    cancellationToken),
+
+                            AssignmentExpressionSyntax assignment =>
+                                UseAssignmentLineBreakAsync(
+                                    context.Document,
+                                    assignment,
+                                    cancellationToken),
+
+                            _ => Task.FromResult(context.Document),
+                        };
+                    },
                 nameof(PreferAssignmentLineBreakCodeFixProvider)),
             diagnostic);
-    }
+        }
 
     private static async Task<Document> UseAssignmentLineBreakAsync(
         Document document,
@@ -83,10 +99,11 @@ public sealed class PreferAssignmentLineBreakCodeFixProvider : CodeFixProvider
 
         ExpressionSyntax adjustedValue = AddContinuationIndent(initializer.Value, newLine);
 
-        SyntaxToken equalsToken =SyntaxFactory.Token(
-            SyntaxTriviaList.Empty,
-            SyntaxKind.EqualsToken,
-            equalsTrailingTrivia);
+        SyntaxToken equalsToken =
+            SyntaxFactory.Token(
+                SyntaxTriviaList.Empty,
+                SyntaxKind.EqualsToken,
+                equalsTrailingTrivia);
 
         EqualsValueClauseSyntax replacement =
             initializer
@@ -94,6 +111,47 @@ public sealed class PreferAssignmentLineBreakCodeFixProvider : CodeFixProvider
                 .WithValue(adjustedValue.WithoutLeadingTrivia());
 
         SyntaxNode newRoot = root.ReplaceNode(initializer, replacement);
+
+        return document.WithSyntaxRoot(newRoot);
+    }
+
+    private static async Task<Document> UseAssignmentLineBreakAsync(
+        Document document,
+        AssignmentExpressionSyntax assignment,
+        CancellationToken cancellationToken)
+    {
+        SyntaxNode? root = await document.GetSyntaxRootAsync(cancellationToken);
+
+        if (root is null)
+        {
+            return document;
+        }
+
+        ExpressionSyntax right = assignment.Right;
+
+        string newLine = await CodeFixUtilities.GetNewLineAsync(document, cancellationToken);
+        SourceText sourceText = await document.GetTextAsync(cancellationToken);
+
+        string leftIndent = GetLineIndentation(sourceText, assignment.OperatorToken.SpanStart);
+        string rightIndent = leftIndent + "    ";
+
+        SyntaxTriviaList operatorTrailingTrivia =
+            SyntaxFactory.TriviaList(SyntaxFactory.EndOfLine(newLine), SyntaxFactory.Whitespace(rightIndent));
+
+        ExpressionSyntax adjustedValue = AddContinuationIndent(right, newLine);
+
+        SyntaxToken operatorToken =
+            SyntaxFactory.Token(
+                SyntaxTriviaList.Empty,
+                assignment.OperatorToken.Kind(),
+                operatorTrailingTrivia);
+
+        AssignmentExpressionSyntax replacement =
+            assignment
+                .WithOperatorToken(operatorToken)
+                .WithRight(adjustedValue.WithoutLeadingTrivia());
+
+        SyntaxNode newRoot = root.ReplaceNode(assignment, replacement);
 
         return document.WithSyntaxRoot(newRoot);
     }
@@ -115,5 +173,13 @@ public sealed class PreferAssignmentLineBreakCodeFixProvider : CodeFixProvider
                 .TakeWhile(trivia => trivia.IsKind(SyntaxKind.WhitespaceTrivia))
                 .Reverse()
                 .Select(trivia => trivia.ToFullString()));
+    }
+
+    private static string GetLineIndentation(SourceText sourceText, int position)
+    {
+        TextLine line = sourceText.Lines.GetLineFromPosition(position);
+        string lineText = line.ToString();
+
+        return new string(lineText.TakeWhile(char.IsWhiteSpace).ToArray());
     }
 }
