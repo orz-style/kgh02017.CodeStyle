@@ -290,4 +290,155 @@ public sealed class PreferAssignmentLineBreakCodeFixProviderTests
 
         return VerifyCodeFixAsync(source, fixedSource);
     }
+
+    [Fact]
+    public Task Assignment_WhenFixed_MovesRightHandSideToNextLine()
+    {
+        const string source =
+            """
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task Test()
+                {
+                    int value = 0;
+                    value {|KGH1007:=|} await GetValueAsync()
+                        .ConfigureAwait(false);
+                }
+
+                private async Task<int> GetValueAsync()
+                {
+                    await Task.Delay(1000);
+                    return 0;
+                }
+            }
+            """;
+
+        const string fixedSource =
+            """
+            using System.Threading.Tasks;
+
+            public sealed class TestClass
+            {
+                public async Task Test()
+                {
+                    int value = 0;
+                    value =
+                        await GetValueAsync()
+                            .ConfigureAwait(false);
+                }
+
+                private async Task<int> GetValueAsync()
+                {
+                    await Task.Delay(1000);
+                    return 0;
+                }
+            }
+            """;
+
+        return VerifyCodeFixAsync(source, fixedSource);
+    }
+
+    [Fact]
+    public Task AddAssignment_WhenFixed_MovesRightHandSideToNextLine()
+    {
+        const string source =
+            """
+            using System;
+
+            public sealed class TestClass
+            {
+                public event EventHandler Handler;
+
+                public void Test()
+                {
+                    Handler {|KGH1007:+=|} (_, _) =>
+                    {
+                    };
+                }
+            }
+            """;
+
+        const string fixedSource =
+            """
+            using System;
+
+            public sealed class TestClass
+            {
+                public event EventHandler Handler;
+
+                public void Test()
+                {
+                    Handler +=
+                        (_, _) =>
+                        {
+                        };
+                }
+            }
+            """;
+
+        return VerifyCodeFixAsync(source, fixedSource);
+    }
+
+    [Fact]
+    public Task Assignment_WhenInsideObjectInitializer_UsesPropertyIndentation()
+    {
+        const string source =
+            """
+            public sealed class TestClass
+            {
+                public void Test()
+                {
+                    var person =
+                        new Person
+                        {
+                            Name {|KGH1007:=|} BuildName(
+                                "Taro",
+                                "Yamada"),
+                        };
+                }
+
+                private string BuildName(string firstName, string lastName)
+                {
+                    return firstName + lastName;
+                }
+
+                private sealed class Person
+                {
+                    public string Name { get; set; } = "";
+                }
+            }
+            """;
+
+        const string fixedSource =
+            """
+            public sealed class TestClass
+            {
+                public void Test()
+                {
+                    var person =
+                        new Person
+                        {
+                            Name =
+                                BuildName(
+                                    "Taro",
+                                    "Yamada"),
+                        };
+                }
+
+                private string BuildName(string firstName, string lastName)
+                {
+                    return firstName + lastName;
+                }
+
+                private sealed class Person
+                {
+                    public string Name { get; set; } = "";
+                }
+            }
+            """;
+
+        return VerifyCodeFixAsync(source, fixedSource);
+    }
 }
