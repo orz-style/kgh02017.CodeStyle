@@ -12,8 +12,8 @@ public sealed class DoNotUseInterpolatedStringInLoggerAnalyzer : DiagnosticAnaly
     private static readonly DiagnosticDescriptor s_rule =
         new(
             DiagnosticIds.DoNotUseInterpolatedStringInLogger,
-            "Do not use interpolated string in logger calls",
-            "Do not use interpolated string in logger calls. Use structured logging instead.",
+            "Do not use interpolated strings in logger calls",
+            "Do not use interpolated strings in logger calls. Use structured logging instead.",
             DiagnosticCategories.Logging,
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
