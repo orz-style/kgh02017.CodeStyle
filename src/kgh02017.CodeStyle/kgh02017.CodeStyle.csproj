@@ -38,4 +38,8 @@
       PackagePath="analyzers/dotnet/cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="docs\rules\" />
+  </ItemGroup>
+
 </Project>

@@ -58,39 +58,24 @@ Combined Roslyn analyzers and code fixes package.
 
 Includes all analyzers and supported code fixes.
 
-#### Roslyn analyzers for coding style rules.
+#### Index
 
-| Rule ID | Category | Severity | Rule Description |
-| ------- | -------- | -------- | ---------------- |
-| KGH1001 | Logging | Warning | Do not use interpolated string in logger calls. Use structured logging instead |
-| KGH1002 | Strings | Warning | Specify StringComparison explicitly |
-| KGH1003 | Nullability | Warning | Use 'is null' or 'is not null' instead of equality operators |
-| KGH1004 | Formatting | Warning | Wrap the text so that line length is less than 120 characters |
-| KGH1005 | Readability | Warning | Use a using declaration instead of a using statement |
-| KGH1006 | Readability | Warning | Use a switch expression instead of a switch statement |
-| KGH1007 | Formatting | Warning | Place a line break after the assignment operator |
-| KGH1008 | Readability | Warning | Use named arguments for null and boolean literal arguments |
-| KGH1009 | Nullability | Warning | Use ArgumentNullException.ThrowIfNull instead of throwing ArgumentNullException manually |
-| KGH1010 | Logging | Warning | Use PascalCase for structured logging placeholder names |
-| KGH1011 | Readability | Warning | Use a collection expression when the collection type is apparent |
-| KGH1012 | Formatting | Warning | Use either a single-line argument list or one argument per line |
-| KGH1013 | Formatting | Warning | Use either a single-line parameter list or one parameter per line |
-| KGH1014 | Formatting | Warning | Place binary operators at the beginning of the continued line |
-
-#### Roslyn code fixes for supported style violations.
-
-| Rule ID | CodeFix Provider  |
-| ------- | ------------------|
-| KGH1003 | PreferIsNullCodeFixProvider |
-| KGH1005 | PreferUsingDeclarationCodeFixProvider |
-| KGH1006 | PreferSwitchExpressionCodeFixProvider |
-| KGH1007 | PreferAssignmentLineBreakCodeFixProvider |
-| KGH1008 | PreferNamedArgumentsForLiteralsCodeFixProvider |
-| KGH1009 | PreferThrowIfNullCodeFixProvider |
-| KGH1011 | PreferCollectionExpressionCodeFixProvider |
-| KGH1012 | PreferConsistentMultilineArgumentsCodeFixProvider |
-| KGH1013 | PreferConsistentMultilineParametersCodeFixProvider |
-| KGH1014 | PreferLeadingContinuationOperatorsCodeFixProvider |
+| Rule ID | Category | Rule Description |
+| ------- | -------- | ---------------- |
+| [KGH1001](src/kgh02017.CodeStyle/docs/rules/KGH1001.md) | Logging | Do not use interpolated strings in logger calls |
+| [KGH1002](src/kgh02017.CodeStyle/docs/rules/KGH1002.md) | Strings | Specify StringComparison |
+| [KGH1003](src/kgh02017.CodeStyle/docs/rules/KGH1003.md) | Nullability | Prefer is null |
+| [KGH1004](src/kgh02017.CodeStyle/docs/rules/KGH1004.md) | Formatting | Line exceeds 120 characters |
+| [KGH1005](src/kgh02017.CodeStyle/docs/rules/KGH1005.md) | Readability | Prefer using declaration |
+| [KGH1006](src/kgh02017.CodeStyle/docs/rules/KGH1006.md) | Readability | Prefer switch expression |
+| [KGH1007](src/kgh02017.CodeStyle/docs/rules/KGH1007.md) | Formatting | Prefer assignment line break |
+| [KGH1008](src/kgh02017.CodeStyle/docs/rules/KGH1008.md) | Readability | Prefer named arguments for literal |
+| [KGH1009](src/kgh02017.CodeStyle/docs/rules/KGH1009.md) | Nullability | Prefer ArgumentNullException.ThrowIfNull |
+| [KGH1010](src/kgh02017.CodeStyle/docs/rules/KGH1010.md) | Logging | Prefer PascalCase logger template names |
+| [KGH1011](src/kgh02017.CodeStyle/docs/rules/KGH1011.md) | Readability | Prefer collection expression |
+| [KGH1012](src/kgh02017.CodeStyle/docs/rules/KGH1012.md) | Formatting | Prefer consistent multiline arguments |
+| [KGH1013](src/kgh02017.CodeStyle/docs/rules/KGH1013.md) | Formatting | Prefer consistent multiline parameters |
+| [KGH1014](src/kgh02017.CodeStyle/docs/rules/KGH1014.md) | Formatting | refer leading continuation operators |
 
 ## Installation
 
@@ -131,8 +116,8 @@ Key principles:
 
 ### Details
 
-- [.editorconfig](/src/kgh02017.CodeStyle.Templates/templates/codestyle/.editorconfig)
-- [CodeStyle.md](/src/kgh02017.CodeStyle.Templates/templates/codestyle/CodeStyle.md)
+- [kgh02017 Coding Style](src/kgh02017.CodeStyle/docs/CodeStyle.md)
+- [.editorconfig](src/kgh02017.CodeStyle.Templates/templates/codestyle/.editorconfig)
 
 ## Repository Structure
 
