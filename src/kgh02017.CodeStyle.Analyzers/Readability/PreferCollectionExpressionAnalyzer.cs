@@ -9,14 +9,17 @@ namespace kgh02017.CodeStyle.Analyzers.Readability;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class PreferCollectionExpressionAnalyzer : DiagnosticAnalyzer
 {
+    private const string Title = "Prefer collection expression";
+    private const string Message = "Use a collection expression when the collection type can be inferred";
+    private const string Description = "When the target collection type can be inferred, use a collection expression.";
+
     private static readonly DiagnosticDescriptor s_rule =
-        new(
-            DiagnosticIds.PreferCollectionExpression,
-            "Prefer collection expression",
-            "Use a collection expression when the collection type is apparent",
-            DiagnosticCategories.Readability,
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        DiagnosticDescriptorBuilder.CreateRule(
+            id: DiagnosticIds.PreferCollectionExpression,
+            title: Title,
+            message: Message,
+            category: DiagnosticCategories.Readability,
+            description: Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [s_rule];
 

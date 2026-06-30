@@ -10,14 +10,18 @@ namespace kgh02017.CodeStyle.Analyzers.Logging;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class PreferPascalCaseLoggerTemplateNamesAnalyzer : DiagnosticAnalyzer
 {
+    private const string Title = "Prefer PascalCase logger template names";
+    private const string Message = "Use PascalCase for structured logging placeholder names";
+    private const string Description =
+        "When using structured logging placeholders, use the PascalCase naming convention.";
+
     private static readonly DiagnosticDescriptor s_rule =
-        new(
-            DiagnosticIds.PreferPascalCaseLoggerTemplateNames,
-            "Prefer PascalCase logger template names",
-            "Use PascalCase for structured logging placeholder names",
-            DiagnosticCategories.Logging,
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        DiagnosticDescriptorBuilder.CreateRule(
+            id: DiagnosticIds.PreferPascalCaseLoggerTemplateNames,
+            title: Title,
+            message: Message,
+            category: DiagnosticCategories.Logging,
+            description: Description);
 
     private static readonly Regex s_templateRegex = new(@"\{(?<name>[^\}]+)\}", RegexOptions.Compiled);
 

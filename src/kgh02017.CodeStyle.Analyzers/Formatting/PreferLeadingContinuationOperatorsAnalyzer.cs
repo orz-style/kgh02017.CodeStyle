@@ -10,14 +10,20 @@ namespace kgh02017.CodeStyle.Analyzers.Formatting;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class PreferLeadingContinuationOperatorsAnalyzer : DiagnosticAnalyzer
 {
+    private const string Title = "Prefer leading continuation operators";
+    private const string Message =
+        "Place binary operators at the beginning of the continued line or the entire expression on a single line";
+    private const string Description =
+        "When an expression spans multiple lines, use a consistent layout by placing either continuation"
+        + "operators at the beginning of the continued line or the entire expression on a single line.";
+
     private static readonly DiagnosticDescriptor s_rule =
-        new(
-            DiagnosticIds.PreferLeadingContinuationOperators,
-            "Prefer leading continuation operators",
-            "Place binary operators at the beginning of the continued line",
-            DiagnosticCategories.Formatting,
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        DiagnosticDescriptorBuilder.CreateRule(
+            id: DiagnosticIds.PreferLeadingContinuationOperators,
+            title: Title,
+            message: Message,
+            category: DiagnosticCategories.Formatting,
+            description: Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [s_rule];
 

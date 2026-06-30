@@ -9,14 +9,17 @@ namespace kgh02017.CodeStyle.Analyzers.Formatting;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class MaximumLineLengthAnalyzer : DiagnosticAnalyzer
 {
+    private const string Title = "Line exceeds 120 characters";
+    private const string Message = "Split the text so that line length is less than 120 characters";
+    private const string Description = "When a line exceeds 120 characters, split it across multiple lines.";
+
     private static readonly DiagnosticDescriptor s_rule =
-        new(
-            DiagnosticIds.MaximumLineLength,
-            "Line exceeds 120 characters",
-            "Wrap the text so that line length is less than 120 characters",
-            DiagnosticCategories.Formatting,
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        DiagnosticDescriptorBuilder.CreateRule(
+            id: DiagnosticIds.MaximumLineLength,
+            title: Title,
+            message: Message,
+            category: DiagnosticCategories.Formatting,
+            description: Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [s_rule];
 

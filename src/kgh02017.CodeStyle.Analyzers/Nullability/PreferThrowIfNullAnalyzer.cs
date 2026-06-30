@@ -9,14 +9,20 @@ namespace kgh02017.CodeStyle.Analyzers.Nullability;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class PreferThrowIfNullAnalyzer : DiagnosticAnalyzer
 {
+    private const string Title = "Prefer ArgumentNullException.ThrowIfNull";
+    private const string Message =
+        "Use ArgumentNullException.ThrowIfNull instead of throwing ArgumentNullException manually";
+    private const string Description =
+        "When validating arguments, use ArgumentNullException."
+        + "ThrowIfNull instead of throwing ArgumentNullException manually.";
+
     private static readonly DiagnosticDescriptor s_rule =
-        new(
-            DiagnosticIds.PreferThrowIfNull,
-            "Prefer ArgumentNullException.ThrowIfNull",
-            "Use ArgumentNullException.ThrowIfNull instead of throwing ArgumentNullException manually",
-            DiagnosticCategories.Nullability,
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        DiagnosticDescriptorBuilder.CreateRule(
+            id: DiagnosticIds.PreferThrowIfNull,
+            title: Title,
+            message: Message,
+            category: DiagnosticCategories.Nullability,
+            description: Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [s_rule];
 

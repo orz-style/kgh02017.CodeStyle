@@ -9,14 +9,18 @@ namespace kgh02017.CodeStyle.Analyzers.Strings;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class SpecifyStringComparisonAnalyzer : DiagnosticAnalyzer
 {
+    private const string Title = "Specify StringComparison";
+    private const string Message = "Specify StringComparison explicitly";
+    private const string Description =
+        "When calling string comparison APIs, specify the StringComparison argument explicitly.";
+
     private static readonly DiagnosticDescriptor s_rule =
-        new(
-            DiagnosticIds.SpecifyStringComparison,
-            "Specify StringComparison",
-            "Specify StringComparison explicitly",
-            DiagnosticCategories.Strings,
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        DiagnosticDescriptorBuilder.CreateRule(
+            id: DiagnosticIds.SpecifyStringComparison,
+            title: Title,
+            message: Message,
+            category: DiagnosticCategories.Strings,
+            description: Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [s_rule];
 
