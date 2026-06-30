@@ -9,14 +9,18 @@ namespace kgh02017.CodeStyle.Analyzers.Nullability;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class PreferIsNullAnalyzer : DiagnosticAnalyzer
 {
+    private const string Title = "Prefer is null";
+    private const string Message = "Use 'is null' or 'is not null' instead of equality operators";
+    private const string Description =
+        "When checking for null, use the `is null` pattern instead of the `==` operator.";
+
     private static readonly DiagnosticDescriptor s_rule =
-        new(
-            DiagnosticIds.PreferIsNull,
-            "Prefer is null",
-            "Use 'is null' or 'is not null' instead of equality operators",
-            DiagnosticCategories.Nullability,
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        DiagnosticDescriptorBuilder.CreateRule(
+            id: DiagnosticIds.PreferIsNull,
+            title: Title,
+            message: Message,
+            category: DiagnosticCategories.Nullability,
+            description: Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [s_rule];
 

@@ -9,14 +9,19 @@ namespace kgh02017.CodeStyle.Analyzers.Formatting;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class PreferAssignmentLineBreakAnalyzer : DiagnosticAnalyzer
 {
+    private const string Title = "Prefer assignment line break";
+    private const string Message = "Place a line break after the assignment operator";
+    private const string Description =
+        "When the right-hand side of an assignment spans multiple lines, "
+        + "place the assigned value on the following line.";
+
     private static readonly DiagnosticDescriptor s_rule =
-        new(
-            DiagnosticIds.PreferAssignmentLineBreak,
-            "Prefer assignment line break",
-            "Place a line break after the assignment operator",
-            DiagnosticCategories.Formatting,
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        DiagnosticDescriptorBuilder.CreateRule(
+            id: DiagnosticIds.PreferAssignmentLineBreak,
+            title: Title,
+            message: Message,
+            category: DiagnosticCategories.Formatting,
+            description: Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [s_rule];
 

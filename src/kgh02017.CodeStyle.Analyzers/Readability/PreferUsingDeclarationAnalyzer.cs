@@ -9,14 +9,17 @@ namespace kgh02017.CodeStyle.Analyzers.Readability;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class PreferUsingDeclarationAnalyzer : DiagnosticAnalyzer
 {
+    private const string Title = "Prefer using declaration";
+    private const string Message = "Use a using declaration instead of a using statement";
+    private const string Description = "When using a using statement, prefer a using declaration instead.";
+
     private static readonly DiagnosticDescriptor s_rule =
-        new(
-            DiagnosticIds.PreferUsingDeclaration,
-            "Prefer using declaration",
-            "Use a using declaration instead of a using statement",
-            DiagnosticCategories.Readability,
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        DiagnosticDescriptorBuilder.CreateRule(
+            id: DiagnosticIds.PreferUsingDeclaration,
+            title: Title,
+            message: Message,
+            category: DiagnosticCategories.Readability,
+            description: Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [s_rule];
 

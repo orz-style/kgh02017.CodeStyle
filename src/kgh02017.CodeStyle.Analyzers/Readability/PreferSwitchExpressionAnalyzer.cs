@@ -9,14 +9,17 @@ namespace kgh02017.CodeStyle.Analyzers.Readability;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class PreferSwitchExpressionAnalyzer : DiagnosticAnalyzer
 {
+    private const string Title = "Prefer switch expression";
+    private const string Message = "Use a switch expression instead of a switch statement";
+    private const string Description = "When using a switch statement, use a switch expression instead.";
+
     private static readonly DiagnosticDescriptor s_rule =
-        new(
-            DiagnosticIds.PreferSwitchExpression,
-            "Prefer switch expression",
-            "Use a switch expression instead of a switch statement",
-            DiagnosticCategories.Readability,
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        DiagnosticDescriptorBuilder.CreateRule(
+            id: DiagnosticIds.PreferSwitchExpression,
+            title: Title,
+            message: Message,
+            category: DiagnosticCategories.Readability,
+            description: Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [s_rule];
 

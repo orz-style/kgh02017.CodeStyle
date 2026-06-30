@@ -9,14 +9,19 @@ namespace kgh02017.CodeStyle.Analyzers.Formatting;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class PreferConsistentMultilineArgumentsAnalyzer : DiagnosticAnalyzer
 {
+    private const string Title = "Prefer consistent multiline arguments";
+    private const string Message = "Place all arguments on a single line or one argument per line";
+    private const string Description =
+        "When an argument list spans multiple lines, use a consistent layout by placing either "
+        + "one argument per line or all arguments on a single line.";
+
     private static readonly DiagnosticDescriptor s_rule =
-        new(
-            DiagnosticIds.PreferConsistentMultilineArguments,
-            "Prefer consistent multiline arguments",
-            "Use either a single-line argument list or one argument per line",
-            DiagnosticCategories.Formatting,
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        DiagnosticDescriptorBuilder.CreateRule(
+            id: DiagnosticIds.PreferConsistentMultilineArguments,
+            title: Title,
+            message: Message,
+            category: DiagnosticCategories.Formatting,
+            description: Description);
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [s_rule];
 
