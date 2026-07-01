@@ -45,7 +45,7 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProvider : CodeFixP
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use leading operators",
+                "Places continuation operators at the beginning of the continued line",
                 cancellationToken =>
                 {
                     return target switch
@@ -64,7 +64,7 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProvider : CodeFixP
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use single-line expression",
+                "Places the entire expression on a single line",
                 cancellationToken =>
                 {
                     return target switch
