@@ -44,27 +44,27 @@ public sealed class PreferAssignmentLineBreakCodeFixProvider : CodeFixProvider
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Places the assigned value on the following line",
-                cancellationToken =>
+                title: "Places the assigned value on the following line",
+                createChangedDocument: cancellationToken =>
+                {
+                    return target switch
                     {
-                        return target switch
-                        {
-                            EqualsValueClauseSyntax initializer =>
-                                UseAssignmentLineBreakAsync(
-                                    context.Document,
-                                    initializer,
-                                    cancellationToken),
+                        EqualsValueClauseSyntax initializer =>
+                            UseAssignmentLineBreakAsync(
+                                context.Document,
+                                initializer,
+                                cancellationToken),
 
-                            AssignmentExpressionSyntax assignment =>
-                                UseAssignmentLineBreakAsync(
-                                    context.Document,
-                                    assignment,
-                                    cancellationToken),
+                        AssignmentExpressionSyntax assignment =>
+                            UseAssignmentLineBreakAsync(
+                                context.Document,
+                                assignment,
+                                cancellationToken),
 
-                            _ => Task.FromResult(context.Document),
-                        };
-                    },
-                nameof(PreferAssignmentLineBreakCodeFixProvider)),
+                        _ => Task.FromResult(context.Document),
+                    };
+                },
+                equivalenceKey: nameof(PreferAssignmentLineBreakCodeFixProvider)),
             diagnostic);
         }
 
