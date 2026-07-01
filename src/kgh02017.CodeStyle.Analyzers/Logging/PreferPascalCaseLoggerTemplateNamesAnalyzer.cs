@@ -45,7 +45,7 @@ public sealed class PreferPascalCaseLoggerTemplateNamesAnalyzer : DiagnosticAnal
 
         string methodName = memberAccess.Name.Identifier.ValueText;
 
-        if (!methodName.StartsWith("Log"))
+        if (!methodName.StartsWith("Log", StringComparison.Ordinal))
         {
             return;
         }
@@ -85,6 +85,5 @@ public sealed class PreferPascalCaseLoggerTemplateNamesAnalyzer : DiagnosticAnal
                 context.ReportDiagnostic(diagnostic);
             }
         }
-
     }
 }
