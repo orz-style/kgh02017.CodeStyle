@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.Composition;
-using System.Reflection.Emit;
 using kgh02017.CodeStyle.Analyzers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -47,10 +46,10 @@ public sealed class PreferSwitchExpressionCodeFixProvider : CodeFixProvider
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use a switch expression",
-                cancellationToken =>
+                title: "Use a switch expression",
+                createChangedDocument: cancellationToken =>
                     UseSwitchExpressionAsync(context.Document, switchStatement, cancellationToken),
-                nameof(PreferSwitchExpressionCodeFixProvider)),
+                equivalenceKey: nameof(PreferSwitchExpressionCodeFixProvider)),
             diagnostic);
     }
 
@@ -73,8 +72,8 @@ public sealed class PreferSwitchExpressionCodeFixProvider : CodeFixProvider
 
             foreach (SwitchLabelSyntax label in section.Labels)
             {
-
                 SwitchExpressionArmSyntax arm;
+
                 if (label is CaseSwitchLabelSyntax caseLabel)
                 {
                     arm =

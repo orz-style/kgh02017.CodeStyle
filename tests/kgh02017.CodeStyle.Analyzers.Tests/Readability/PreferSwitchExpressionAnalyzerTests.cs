@@ -1,5 +1,4 @@
 using kgh02017.CodeStyle.Analyzers.Readability;
-using Newtonsoft.Json.Linq;
 
 namespace kgh02017.CodeStyle.Analyzers.Tests.Readability;
 
