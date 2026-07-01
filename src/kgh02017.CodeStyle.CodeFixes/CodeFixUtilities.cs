@@ -10,13 +10,10 @@ internal static class CodeFixUtilities
         Document document,
         CancellationToken cancellationToken)
     {
-        SourceText text =
-            await document.GetTextAsync(cancellationToken);
+        SourceText text = await document.GetTextAsync(cancellationToken);
+        string source = text.ToString();
 
-        string source =
-            text.ToString();
-
-        return source.Contains("\r\n")
+        return source.Contains("\r\n", StringComparison.Ordinal)
             ? "\r\n"
             : "\n";
     }
