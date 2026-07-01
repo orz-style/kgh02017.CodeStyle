@@ -45,7 +45,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use one argument per line",
+                "Places one argument on each line",
                 cancellationToken =>
                     UseOneArgumentPerLineAsync(context.Document, argumentList, cancellationToken),
                 "UseOneArgumentPerLine"),
@@ -53,7 +53,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use single-line argument list",
+                "Places all arguments on a single line",
                 cancellationToken =>
                     UseSingleLineArgumentListAsync(context.Document, argumentList, cancellationToken),
                 "UseSingleLineArgumentList"),
