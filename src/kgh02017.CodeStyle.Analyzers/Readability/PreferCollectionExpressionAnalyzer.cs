@@ -56,8 +56,8 @@ public sealed class PreferCollectionExpressionAnalyzer : DiagnosticAnalyzer
         string typeName = typeSymbol.ConstructedFrom.ToDisplayString();
 
         return typeName is
-            "System.Collections.Generic.List<T>" or
-            "System.Collections.Generic.HashSet<T>" or
-            "System.Collections.Generic.Dictionary<TKey, TValue>";
+            "System.Collections.Generic.List<T>"
+            or "System.Collections.Generic.HashSet<T>"
+            or "System.Collections.Generic.Dictionary<TKey, TValue>";
     }
 }
