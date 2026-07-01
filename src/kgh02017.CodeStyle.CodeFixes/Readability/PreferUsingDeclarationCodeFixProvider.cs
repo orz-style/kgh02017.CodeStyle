@@ -46,7 +46,7 @@ public sealed class PreferUsingDeclarationCodeFixProvider : CodeFixProvider
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use using declaration",
+                "Use a using declaration",
                 cancellationToken =>
                     UseUsingDeclarationAsync(context.Document, usingStatement, cancellationToken),
                 nameof(PreferUsingDeclarationCodeFixProvider)),
