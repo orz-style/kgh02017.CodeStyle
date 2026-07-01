@@ -45,10 +45,10 @@ public sealed class PreferNamedArgumentsForLiteralsCodeFixProvider : CodeFixProv
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use named arguments",
-                cancellationToken =>
+                title: "Use named arguments",
+                createChangedDocument: cancellationToken =>
                     UseNamedArgumentAsync(context.Document, argument, cancellationToken),
-                nameof(PreferNamedArgumentsForLiteralsCodeFixProvider)),
+                equivalenceKey: nameof(PreferNamedArgumentsForLiteralsCodeFixProvider)),
             diagnostic);
     }
 
