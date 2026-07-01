@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.Composition;
-using System.Diagnostics;
 using kgh02017.CodeStyle.Analyzers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -45,20 +44,19 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Places one argument on each line",
-                cancellationToken =>
+                title: "Places one argument on each line",
+                createChangedDocument: cancellationToken =>
                     UseOneArgumentPerLineAsync(context.Document, argumentList, cancellationToken),
-                "UseOneArgumentPerLine"),
+                equivalenceKey: "UseOneArgumentPerLine"),
             diagnostic);
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Places all arguments on a single line",
-                cancellationToken =>
+                title: "Places all arguments on a single line",
+                createChangedDocument: cancellationToken =>
                     UseSingleLineArgumentListAsync(context.Document, argumentList, cancellationToken),
-                "UseSingleLineArgumentList"),
+                equivalenceKey: "UseSingleLineArgumentList"),
             diagnostic);
-
     }
 
     private static async Task<Document> UseOneArgumentPerLineAsync(
@@ -88,12 +86,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
                 .FirstOrDefault();
 
         SourceText sourceText = await document.GetTextAsync(cancellationToken);
-
-        string baseIndent =
-            GetLineIndentation(
-                sourceText,
-                argumentList.OpenParenToken.SpanStart);
-
+        string baseIndent = GetLineIndentation(sourceText, argumentList.OpenParenToken.SpanStart);
         string argumentIndent = baseIndent + "    ";
 
         SyntaxTriviaList argumentLeadingTrivia =
@@ -101,15 +94,13 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
                 SyntaxFactory.EndOfLine(newLine),
                 SyntaxFactory.Whitespace(argumentIndent));
 
-
         SeparatedSyntaxList<ArgumentSyntax> newArguments =
             SyntaxFactory.SeparatedList(
-                arguments.Select(argument =>
-                    NormalizeArgumentForMultiLine(argument, newLine, argumentIndent)),
+                arguments.Select(
+                    argument => NormalizeArgumentForMultiLine(argument, newLine, argumentIndent)),
                 arguments
                     .GetSeparators()
-                    .Select(separator =>
-                        separator.WithTrailingTrivia(argumentLeadingTrivia)));
+                    .Select(separator => separator.WithTrailingTrivia(argumentLeadingTrivia)));
 
         ArgumentListSyntax newArgumentList =
             argumentList
@@ -218,15 +209,15 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProvider : CodeFixP
         string adjustedText =
             string.Join(
                 newLine,
-                lines.Select((line, index) =>
-                    index == 0
-                        ? line
-                        : argumentIndent + RemovePrefix(line, baseIndent)));
+                lines.Select(
+                    (line, index) =>
+                        index == 0
+                            ? line
+                            : argumentIndent + RemovePrefix(line, baseIndent)));
 
         return argument
             .WithExpression(SyntaxFactory.ParseExpression(adjustedText))
             .WithoutLeadingTrivia()
             .WithoutTrailingTrivia();
     }
-
 }
