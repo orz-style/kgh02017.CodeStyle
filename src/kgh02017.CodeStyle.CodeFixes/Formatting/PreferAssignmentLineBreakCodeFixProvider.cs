@@ -44,7 +44,7 @@ public sealed class PreferAssignmentLineBreakCodeFixProvider : CodeFixProvider
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use assignment line break",
+                "Places the assigned value on the following line",
                 cancellationToken =>
                     {
                         return target switch
