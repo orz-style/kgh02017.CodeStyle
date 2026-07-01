@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.Composition;
-using System.Linq.Expressions;
 using kgh02017.CodeStyle.Analyzers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -45,8 +44,8 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProvider : CodeFixP
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Places continuation operators at the beginning of the continued line",
-                cancellationToken =>
+                title: "Places continuation operators at the beginning of the continued line",
+                createChangedDocument: cancellationToken =>
                 {
                     return target switch
                     {
@@ -59,13 +58,13 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProvider : CodeFixP
                         _ => Task.FromResult(context.Document),
                     };
                 },
-                "UseLeadingOperators"),
+                equivalenceKey: "UseLeadingOperators"),
             diagnostic);
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Places the entire expression on a single line",
-                cancellationToken =>
+                title: "Places the entire expression on a single line",
+                createChangedDocument: cancellationToken =>
                 {
                     return target switch
                     {
@@ -78,7 +77,7 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProvider : CodeFixP
                         _ => Task.FromResult(context.Document),
                     };
                 },
-                "UseSingleLineExpression"),
+                equivalenceKey: "UseSingleLineExpression"),
             diagnostic);
     }
 
@@ -96,7 +95,6 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProvider : CodeFixP
 
         SourceText sourceText = await document.GetTextAsync(cancellationToken);
         string newLine = await CodeFixUtilities.GetNewLineAsync(document, cancellationToken);
-
         BinaryExpressionSyntax rootExpression = binaryExpression;
 
         while (rootExpression.Parent is BinaryExpressionSyntax parent
@@ -109,15 +107,15 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProvider : CodeFixP
         string operandIndent = baseIndent + "    ";
 
         SyntaxTriviaList operatorLeadingTrivia =
-            [
-                SyntaxFactory.EndOfLine(newLine),
-                SyntaxFactory.Whitespace(operandIndent),
-            ];
+        [
+            SyntaxFactory.EndOfLine(newLine),
+            SyntaxFactory.Whitespace(operandIndent),
+        ];
 
         SyntaxTriviaList operatorTrailingTrivia =
-            [
-                SyntaxFactory.Space,
-            ];
+        [
+            SyntaxFactory.Space,
+        ];
 
         List<ExpressionSyntax> operandList = [];
         Flatten(rootExpression, rootExpression.Kind(), operandList);
@@ -318,13 +316,15 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProvider : CodeFixP
     private static bool IsTokenAtEndOfLine(ExpressionSyntax leftExpression, SyntaxToken operatorToken)
     {
         int leftLine =
-            leftExpression.GetLocation()
+            leftExpression
+                .GetLocation()
                 .GetLineSpan()
                 .EndLinePosition
                 .Line;
 
         int operatorLine =
-            operatorToken.GetLocation()
+            operatorToken
+                .GetLocation()
                 .GetLineSpan()
                 .StartLinePosition
                 .Line;

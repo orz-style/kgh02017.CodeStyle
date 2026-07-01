@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Linq.Expressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -80,18 +79,13 @@ public class PreferLeadingContinuationOperatorsAnalyzer : DiagnosticAnalyzer
         if (conditionLine == questionTokenLine)
         {
             context.ReportDiagnostic(
-                Diagnostic.Create(
-                    s_rule,
-                    conditional.QuestionToken.GetLocation()));
+                Diagnostic.Create(s_rule, conditional.QuestionToken.GetLocation()));
         }
 
         if (whenTrueLine == colonTokenLine)
         {
             context.ReportDiagnostic(
-                Diagnostic.Create(
-                    s_rule,
-                    conditional.ColonToken.GetLocation()));
+                Diagnostic.Create(s_rule, conditional.ColonToken.GetLocation()));
         }
     }
-
 }
