@@ -47,7 +47,7 @@ public sealed class PreferSwitchExpressionCodeFixProvider : CodeFixProvider
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use switch expression",
+                "Use a switch expression",
                 cancellationToken =>
                     UseSwitchExpressionAsync(context.Document, switchStatement, cancellationToken),
                 nameof(PreferSwitchExpressionCodeFixProvider)),
