@@ -38,8 +38,7 @@ public sealed class PreferIsNullAnalyzer : DiagnosticAnalyzer
     {
         var binaryExpression = (BinaryExpressionSyntax)context.Node;
 
-        if (!IsNullLiteral(binaryExpression.Left) &&
-            !IsNullLiteral(binaryExpression.Right))
+        if (!IsNullLiteral(binaryExpression.Left) && !IsNullLiteral(binaryExpression.Right))
         {
             return;
         }

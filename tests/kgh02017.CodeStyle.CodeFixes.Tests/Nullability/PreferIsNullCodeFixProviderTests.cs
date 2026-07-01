@@ -1,6 +1,5 @@
 using kgh02017.CodeStyle.Analyzers.Nullability;
 using kgh02017.CodeStyle.CodeFixes.Nullability;
-using kgh02017.CodeStyle.CodeFixes.Tests;
 
 namespace kgh02017.CodeStyle.CodeFixes.Tests.Nullability;
 

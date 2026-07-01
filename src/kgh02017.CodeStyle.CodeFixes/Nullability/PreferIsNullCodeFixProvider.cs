@@ -45,10 +45,10 @@ public sealed class PreferIsNullCodeFixProvider : CodeFixProvider
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use pattern matching null check",
-                cancellationToken =>
+                title: "Use pattern matching null check",
+                createChangedDocument: cancellationToken =>
                     UsePatternMatchingNullCheckAsync(context.Document, binaryExpression, cancellationToken),
-                nameof(PreferIsNullCodeFixProvider)),
+                equivalenceKey: nameof(PreferIsNullCodeFixProvider)),
             diagnostic);
     }
 
@@ -97,5 +97,4 @@ public sealed class PreferIsNullCodeFixProvider : CodeFixProvider
     {
         return expression.IsKind(SyntaxKind.NullLiteralExpression);
     }
-
 }
