@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
 using System.Composition;
 using kgh02017.CodeStyle.Analyzers;
-using kgh02017.CodeStyle.Analyzers.Readability;
 using kgh02017.CodeStyle.CodeFixes.Readability;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -47,10 +46,10 @@ public sealed class PreferThrowIfNullCodeFixProvider : CodeFixProvider
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use ArgumentNullException.ThrowIfNull",
-                cancellationToken =>
+                title: "Use ArgumentNullException.ThrowIfNull",
+                createChangedDocument: cancellationToken =>
                     UseThrowIfNullAsync(context.Document, ifStatement, cancellationToken),
-                nameof(PreferUsingDeclarationCodeFixProvider)),
+                equivalenceKey: nameof(PreferUsingDeclarationCodeFixProvider)),
            diagnostic);
     }
 

@@ -42,45 +42,4 @@ public sealed class PreferThrowIfNullCodeFixProviderTests
 
         return VerifyCodeFixAsync(source, fixedSource);
     }
-
-#if false
-    [Fact]
-    public Task IfIsNullThrowArgumentNullExceptionWithThisMember_WhenFixed_ReplacesWithThrowIfNull()
-    {
-        const string source =
-            """
-            using System;
-
-            public sealed class TestClass
-            {
-                private string? _value;
-
-                public void Test()
-                {
-                    {|KGH1009:if (this._value is null)
-                    {
-                        throw new ArgumentNullException(nameof(_value));
-                    }|}
-                }
-            }
-            """;
-
-        const string fixedSource =
-            """
-            using System;
-
-            public sealed class TestClass
-            {
-                private string? _value;
-
-                public void Test()
-                {
-                    ArgumentNullException.ThrowIfNull(this._value);
-                }
-            }
-            """;
-
-        return VerifyCodeFixAsync(source, fixedSource);
-    }
-#endif
 }
