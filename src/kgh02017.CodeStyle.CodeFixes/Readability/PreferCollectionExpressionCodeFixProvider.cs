@@ -45,7 +45,7 @@ public sealed class PreferCollectionExpressionCodeFixProvider : CodeFixProvider
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use collection expression",
+                "Use a collection expression",
                 cancellationToken =>
                     UseCollectionExpressionAsync(context.Document, objectCreation, cancellationToken),
                 nameof(PreferCollectionExpressionCodeFixProvider)),
