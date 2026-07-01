@@ -48,5 +48,4 @@ public sealed class PreferUsingDeclarationAnalyzerTests
 
         return VerifyAnalyzerAsync(source);
     }
-
 }
