@@ -44,7 +44,7 @@ public sealed class PreferConsistentMultilineParametersCodeFixProvider : CodeFix
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use one parameter per line",
+                "Places one parameter on each line",
                 cancellationToken =>
                     UseOneParameterPerLineAsync(context.Document, parameterList, cancellationToken),
                 "UseOneParameterPerLine"),
@@ -52,7 +52,7 @@ public sealed class PreferConsistentMultilineParametersCodeFixProvider : CodeFix
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use single-line parameter list",
+                "Places all parameters on a single line",
                 cancellationToken =>
                     UseSingleLineParameterListAsync(context.Document, parameterList, cancellationToken),
                 "UseSingleLineParameterList"),
