@@ -56,7 +56,7 @@ public sealed class PreferConsistentMultilineArgumentsAnalyzerTests
     }
 
     [Fact]
-    public Task Invocation_WhenSingleLineArgumentList_DoesNotReportDiagnostic()
+    public Task Invocation_WhenAllArgumentsOnSingleLine_DoesNotReportDiagnostic()
     {
         const string source =
            """

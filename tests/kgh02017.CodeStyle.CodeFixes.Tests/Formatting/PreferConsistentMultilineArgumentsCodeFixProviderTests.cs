@@ -91,7 +91,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProviderTests
     }
 
     [Fact]
-    public Task Invocation_WhenNestedInAwaitStatement_UsesStatementIndentation()
+    public Task Invocation_WhenNestedInAwaitStatementWhenFixedWithOneArgumentPerLine_UsesStatementIndentation()
     {
         const string source =
             """
@@ -145,7 +145,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProviderTests
     }
 
     [Fact]
-    public Task Invocation_WhenNestedInAwaitStatement_FormatsArguments()
+    public Task Invocation_WhenNestedInAwaitStatementWhenFixedWithSingleLineArgumentList_UsesStatementIndentation()
     {
         const string source =
             """
@@ -366,7 +366,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProviderTests
     }
 
     [Fact]
-    public Task Invocation_WhenMultilineLamdaArgumentStartsOnOpenParenLine_FormatsOneArgumentPerLine()
+    public Task Invocation_WhenMultilineLamdaArgumentStartsOnOpenParenLineWhenFixedWithOneArgumentPerLine_Formats()
     {
         const string source =
            """
@@ -407,7 +407,7 @@ public sealed class PreferConsistentMultilineArgumentsCodeFixProviderTests
     }
 
     [Fact]
-    public Task Invocation_WhenMultilineLamdaArgumentStartsOnOpenParenLine_FormatsSingleLineArguments()
+    public Task Invocation_WhenMultilineLamdaArgumentStartsOnOpenParenLineWhenFixedWithSingleLineArgumentList_Formats()
     {
         const string source =
            """
