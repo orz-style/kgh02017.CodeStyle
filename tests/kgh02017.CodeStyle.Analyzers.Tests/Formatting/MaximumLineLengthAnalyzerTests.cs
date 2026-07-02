@@ -11,7 +11,7 @@ public sealed class MaximumLineLengthAnalyzerTests
             VerifyCS<MaximumLineLengthAnalyzer>.VerifyAnalyzerAsync(source, expected);
 
     [Fact]
-    public Task LineLongerThan120Characters_ReportsDiagnostic()
+    public Task Line_WhenLongerThan120Characters_ReportsDiagnostic()
     {
         const string source =
             """
@@ -30,7 +30,7 @@ public sealed class MaximumLineLengthAnalyzerTests
     }
 
     [Fact]
-    public Task LineNotLongerThan120Characters_DoesNotReportDiagnostic()
+    public Task Line_WhenNotLongerThan120Characters_DoesNotReportDiagnostic()
     {
         const string source =
             """
