@@ -42,14 +42,13 @@ public sealed class PreferThrowIfNullAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        if (isPatternExpression.Pattern is not ConstantPatternSyntax constantPattern ||
-            !constantPattern.Expression.IsKind(SyntaxKind.NullLiteralExpression))
+        if (isPatternExpression.Pattern is not ConstantPatternSyntax constantPattern
+            || !constantPattern.Expression.IsKind(SyntaxKind.NullLiteralExpression))
         {
             return;
         }
 
-        if (ifStatement.Statement is not BlockSyntax block ||
-            block.Statements.Count != 1)
+        if (ifStatement.Statement is not BlockSyntax block || block.Statements.Count != 1)
         {
             return;
         }
@@ -81,8 +80,8 @@ public sealed class PreferThrowIfNullAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        if (nameofInvocation.Expression is not IdentifierNameSyntax identifierName ||
-            identifierName.Identifier.ValueText != "nameof")
+        if (nameofInvocation.Expression is not IdentifierNameSyntax identifierName
+            || identifierName.Identifier.ValueText != "nameof")
         {
             return;
         }
@@ -111,5 +110,4 @@ public sealed class PreferThrowIfNullAnalyzer : DiagnosticAnalyzer
 
         context.ReportDiagnostic(diagnostic);
     }
-
 }

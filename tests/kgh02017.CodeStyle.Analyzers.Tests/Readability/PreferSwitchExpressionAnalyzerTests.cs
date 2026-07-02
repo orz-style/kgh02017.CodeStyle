@@ -1,5 +1,4 @@
 using kgh02017.CodeStyle.Analyzers.Readability;
-using Newtonsoft.Json.Linq;
 
 namespace kgh02017.CodeStyle.Analyzers.Tests.Readability;
 
@@ -95,7 +94,7 @@ public sealed class PreferSwitchExpressionAnalyzerTests
     }
 
     [Fact]
-    public Task EmptySwitchStatement_DoesNotReportDiagnostic()
+    public Task EmptySwitchStatement_WhenUsed_DoesNotReportDiagnostic()
     {
         const string source =
             """
@@ -146,7 +145,7 @@ public sealed class PreferSwitchExpressionAnalyzerTests
     }
 
     [Fact]
-    public Task SwitchStatementContainingThrow_DoesNotReportDiagnostic()
+    public Task SwitchStatement_WhenContainingThrow_DoesNotReportDiagnostic()
     {
         const string source =
             """

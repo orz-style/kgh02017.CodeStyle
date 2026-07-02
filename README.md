@@ -116,7 +116,7 @@ Key principles:
 
 ### Details
 
-- [kgh02017 Coding Style](src/kgh02017.CodeStyle/docs/CodeStyle.md)
+- [kgh02017 Coding Style](src/kgh02017.CodeStyle/docs/CodingStyle.md)
 - [.editorconfig](src/kgh02017.CodeStyle.Templates/templates/codestyle/.editorconfig)
 
 ## Repository Structure

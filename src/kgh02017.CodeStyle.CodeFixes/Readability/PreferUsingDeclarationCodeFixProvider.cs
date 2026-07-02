@@ -46,10 +46,10 @@ public sealed class PreferUsingDeclarationCodeFixProvider : CodeFixProvider
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use using declaration",
-                cancellationToken =>
+                title: "Use a using declaration",
+                createChangedDocument: cancellationToken =>
                     UseUsingDeclarationAsync(context.Document, usingStatement, cancellationToken),
-                nameof(PreferUsingDeclarationCodeFixProvider)),
+                equivalenceKey: nameof(PreferUsingDeclarationCodeFixProvider)),
             diagnostic);
     }
 
@@ -92,7 +92,7 @@ public sealed class PreferUsingDeclarationCodeFixProvider : CodeFixProvider
                         trailingTrivia));
 
         StatementSyntax[] bodyStatements =
-            [.. block.Statements.Select(statement => statement.WithLeadingTrivia(leadingTrivia))];
+            block.Statements.Select(statement => statement.WithLeadingTrivia(leadingTrivia)).ToArray();
 
         SyntaxList<StatementSyntax> replacementStatements =
             SyntaxFactory.List(
@@ -103,5 +103,4 @@ public sealed class PreferUsingDeclarationCodeFixProvider : CodeFixProvider
 
         return document.WithSyntaxRoot(newRoot);
     }
-
 }

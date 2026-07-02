@@ -43,5 +43,4 @@ public sealed class PreferUsingDeclarationAnalyzer : DiagnosticAnalyzer
 
         context.ReportDiagnostic(diagnostic);
     }
-
 }

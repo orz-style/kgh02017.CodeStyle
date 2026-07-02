@@ -52,7 +52,7 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProviderTests
     }
 
     [Fact]
-    public Task LogicalAndChain_WhenFixedWithLeadingOperators_FormatsSingleLineExpression()
+    public Task LogicalAndChain_WhenFixedWithSingleLineExpression_FormatsEntireExpression()
     {
         const string source =
             """
@@ -174,7 +174,7 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProviderTests
     }
 
     [Fact]
-    public Task LogicalMixedChain_WhenFixedWithLeadingOperators_FormatsSingleLineExpression()
+    public Task LogicalMixedChain_WhenFixedWithSingeLineExpression_FormatsEntireExpression()
     {
         const string source =
             """
@@ -213,7 +213,7 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProviderTests
     }
 
     [Fact]
-    public Task Coalesce_WhenOperatorAtEndOfLine_FormatsEntireExpression()
+    public Task Coalesce_WhenOperatorAtEndOfLineWhenFixedWithLeadingOperators_FormatsEntireExpression()
     {
         const string source =
             """
@@ -243,7 +243,7 @@ public sealed class PreferLeadingContinuationOperatorsCodeFixProviderTests
     }
 
     [Fact]
-    public Task Coalesce_WhenOperatorAtEndOfLine_FormatsSingleLineExpression()
+    public Task Coalesce_WhenOperatorAtEndOfLineWhenFixedWithSingleLineExpression_FormatsEntireExpression()
     {
         const string source =
             """

@@ -44,18 +44,18 @@ public sealed class PreferConsistentMultilineParametersCodeFixProvider : CodeFix
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use one parameter per line",
-                cancellationToken =>
+                title: "Places one parameter on each line",
+                createChangedDocument: cancellationToken =>
                     UseOneParameterPerLineAsync(context.Document, parameterList, cancellationToken),
-                "UseOneParameterPerLine"),
+                equivalenceKey: "UseOneParameterPerLine"),
             diagnostic);
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use single-line parameter list",
-                cancellationToken =>
+                title: "Places all parameters on a single line",
+                createChangedDocument: cancellationToken =>
                     UseSingleLineParameterListAsync(context.Document, parameterList, cancellationToken),
-                "UseSingleLineParameterList"),
+                equivalenceKey: "UseSingleLineParameterList"),
             diagnostic);
     }
 
@@ -88,12 +88,13 @@ public sealed class PreferConsistentMultilineParametersCodeFixProvider : CodeFix
         string parameterIndent = GetIndentation(declaration?.GetLeadingTrivia() ?? default) + "    ";
 
         string text =
-            "(" + newLine +
-            parameterIndent +
-            string.Join(
+            "("
+            + newLine
+            + parameterIndent
+            + string.Join(
                 "," + newLine + parameterIndent,
-                parameters.Select(a => a.ToString())) +
-            ")";
+                parameters.Select(a => a.ToString()))
+            + ")";
 
         ParameterListSyntax newParameterList = SyntaxFactory.ParseParameterList(text);
 
@@ -127,9 +128,9 @@ public sealed class PreferConsistentMultilineParametersCodeFixProvider : CodeFix
         SeparatedSyntaxList<ParameterSyntax> parameters = parameterList.Parameters;
 
         string text =
-            "(" +
-            string.Join(", ", parameters.Select(a => a.ToString())) +
-            ")";
+            "("
+            + string.Join(", ", parameters.Select(a => a.ToString()))
+            + ")";
 
         ParameterListSyntax newParameterList = SyntaxFactory.ParseParameterList(text);
 

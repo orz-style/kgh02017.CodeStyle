@@ -34,7 +34,6 @@ public sealed class PreferSwitchExpressionAnalyzer : DiagnosticAnalyzer
     {
         var switchStatement = (SwitchStatementSyntax)context.Node;
 
-        // Only analyze switch statements with switch sections that contain a single return statement.
         if (switchStatement.Sections.Count == 0)
         {
             return;
@@ -64,8 +63,7 @@ public sealed class PreferSwitchExpressionAnalyzer : DiagnosticAnalyzer
         {
             ReturnStatementSyntax => true,
             BlockSyntax block =>
-                    block.Statements.Count == 1 &&
-                    block.Statements[0] is ReturnStatementSyntax,
+                block.Statements.Count == 1 && block.Statements[0] is ReturnStatementSyntax,
             _ => false,
         };
     }

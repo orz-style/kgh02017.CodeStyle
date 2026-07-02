@@ -45,10 +45,10 @@ public sealed class PreferCollectionExpressionCodeFixProvider : CodeFixProvider
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                "Use collection expression",
-                cancellationToken =>
+                title: "Use a collection expression",
+                createChangedDocument: cancellationToken =>
                     UseCollectionExpressionAsync(context.Document, objectCreation, cancellationToken),
-                nameof(PreferCollectionExpressionCodeFixProvider)),
+                equivalenceKey: nameof(PreferCollectionExpressionCodeFixProvider)),
             diagnostic);
     }
 

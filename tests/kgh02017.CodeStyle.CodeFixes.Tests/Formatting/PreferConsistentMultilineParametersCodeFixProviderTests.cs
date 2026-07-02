@@ -177,7 +177,7 @@ public sealed class PreferConsistentMultilineParametersCodeFixProviderTests
     }
 
     [Fact]
-    public Task Declaration_WhenFirstParameterIsOnSameLineAsOpenParen_FormatsParameters()
+    public Task Declaration_WhenFirstParameterIsOnSameLineAsOpenParenWhenFixedWithOneParameterPerLine_Formats()
     {
         const string source =
             """

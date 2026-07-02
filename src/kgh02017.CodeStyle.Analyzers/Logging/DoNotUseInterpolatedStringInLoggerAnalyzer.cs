@@ -42,7 +42,7 @@ public sealed class DoNotUseInterpolatedStringInLoggerAnalyzer : DiagnosticAnaly
 
         string methodName = memberAccess.Name.Identifier.ValueText;
 
-        if (!methodName.StartsWith("Log"))
+        if (!methodName.StartsWith("Log", StringComparison.Ordinal))
         {
             return;
         }

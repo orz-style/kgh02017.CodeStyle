@@ -40,9 +40,9 @@ public sealed class PreferNamedArgumentsForLiteralsAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        if (!argument.Expression.IsKind(SyntaxKind.NullLiteralExpression) &&
-            !argument.Expression.IsKind(SyntaxKind.TrueLiteralExpression) &&
-            !argument.Expression.IsKind(SyntaxKind.FalseLiteralExpression))
+        if (!argument.Expression.IsKind(SyntaxKind.NullLiteralExpression)
+            && !argument.Expression.IsKind(SyntaxKind.TrueLiteralExpression)
+            && !argument.Expression.IsKind(SyntaxKind.FalseLiteralExpression))
         {
             return;
         }
