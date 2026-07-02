@@ -56,7 +56,7 @@ public sealed class PreferConsistentMultilineParametersAnalyzerTests
     }
 
     [Fact]
-    public Task Declaration_WhenSingleLineParameterList_DoesNotReportDiagnostic()
+    public Task Declaration_WhenAllParametersOnSingleLine_DoesNotReportDiagnostic()
     {
         const string source =
            """
